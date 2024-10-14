@@ -1,4 +1,3 @@
-import React from 'react';
 import { Cpu } from 'lucide-react';
 import "../styles/home.css";
 import LogoCBTECH from "../components/LogoCBTECH.jpg";
