@@ -9,10 +9,16 @@
     
   }
   .home-CBTECH {
-    width: 80%;
-    height: 100%;
-    border: red;
+    height: 80%;
+    margin-top: 2rem;
+    width: 80%;;
   }
+  .home-CBTECH img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+ 
   .home-logo {
     width: 8rem;
     height: 8rem;
@@ -34,3 +40,43 @@
       transform: rotate(360deg);
     }
   }
+
+  /* Tablet styles */
+@media (max-width: 768px) {
+  .page {
+    padding: 1.5rem;
+  }
+
+  .page-icon {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .page h1 {
+    font-size: 1.75rem;
+  }
+
+  .page p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Smartphone styles */
+@media (max-width: 480px) {
+  .page {
+    padding: 1rem;
+  }
+
+  .page-icon {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .page h1 {
+    font-size: 1.5rem;
+  }
+
+  .page p {
+    font-size: 0.8rem;
+  }
+}
