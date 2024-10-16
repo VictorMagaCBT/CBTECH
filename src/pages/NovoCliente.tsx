@@ -12,6 +12,8 @@ export const NovoCliente = () => {
     telefone: '',
     morada: ''
   });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,14 +21,20 @@ export const NovoCliente = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
     try {
       const response = await api.createCliente(formData);
       console.log('Response:', response);
-      alert('Cliente criado com sucesso!');
+      setSuccess('Cliente criado com sucesso!');
       setFormData({ nome: '', email: '', nif: '', telefone: '', morada: '' });
     } catch (err) {
       console.error('Error creating client:', err);
-      alert('Erro ao criar cliente: ' + (err instanceof Error ? err.message : String(err)));
+      if (err instanceof Error) {
+        setError(`Erro ao criar cliente: ${err.message}`);
+      } else {
+        setError('Erro desconhecido ao criar cliente');
+      }
     }
   };
 
@@ -34,6 +42,8 @@ export const NovoCliente = () => {
     <div className="page novo-cliente-page">
       <UserPlus className="page-icon" />
       <h1>Novo Cliente</h1>
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
       <form onSubmit={handleSubmit} className="cliente-form">
         <div className="form-columns">
           <div className="form-column">

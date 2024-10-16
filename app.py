@@ -1,50 +1,51 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import db, Cliente, Assistencia
 from api.routes import api
-from dotenv import load_dotenv
-import os
+import config
+import logging
 
-load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
+# Configurar logging
+logging.basicConfig(level=logging.DEBUG)
+
+print("DATABASE_URL:", config.DATABASE_URL)
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/api/*": {"origins": config.FRONTEND_URL}})
 
 # Configure o PostgreSQL
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SECRET_KEY"] = config.SECRET_KEY
 
 # Initialize the database
 db.init_app(app)
 
+# Teste de conexão com o banco de dados
+with app.app_context():
+    try:
+        db.engine.connect()
+        print("Conexão com o banco de dados bem-sucedida!")
+    except Exception as e:
+        print("Erro ao conectar ao banco de dados:", str(e))
+
 # Register the API blueprint
 app.register_blueprint(api, url_prefix='/api')
 
-def populate_test_data():
-    # Check if there are already clients in the database
-    if Cliente.query.first() is None:
-        # Create test clients
-        clients = [
-            Cliente(nome="João Silva", email="joao@email.com", nif="123456789", telefone="912345678", morada="Rua A, 123, Lisboa"),
-            Cliente(nome="Maria Santos", email="maria@email.com", nif="987654321", telefone="923456789", morada="Avenida B, 456, Porto"),
-            Cliente(nome="Pedro Ferreira", email="pedro@email.com", nif="456789123", telefone="934567890", morada="Praça C, 789, Braga"),
-            Cliente(nome="Ana Rodrigues", email="ana@email.com", nif="789123456", telefone="945678901", morada="Largo D, 012, Faro")
-        ]
-        
-        # Add clients to the database
-        for client in clients:
-            db.session.add(client)
-        
-        # Commit the changes
-        db.session.commit()
-        print("Test data populated successfully.")
-    else:
-        print("Database already contains data. Skipping population.")
+@app.route('/')
+def home():
+    return jsonify({"message": "Bem-vindo à API da CBTECH"}), 200
 
-# Create the database tables and populate with test data
-with app.app_context():
-    db.create_all()
-    populate_test_data()
+@app.before_request
+def log_request_info():
+    app.logger.debug('Headers: %s', request.headers)
+    app.logger.debug('Body: %s', request.get_data())
+
+@app.after_request
+def log_response_info(response):
+    app.logger.debug('Response Status: %s', response.status)
+    app.logger.debug('Response: %s', response.get_data())
+    return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
+      app.run(debug=config.DEBUG, port=config.PORT, host='0.0.0.0')
