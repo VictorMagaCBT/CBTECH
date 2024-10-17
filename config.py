@@ -19,8 +19,8 @@ if db_url:
 else:
     DATABASE_URL = None
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'cbtech')
-BACKEND_URL = os.getenv('BACKEND_URL', 'https://stunning-carnival-pvx6547vqqxcrqx-5000.app.github.dev/')
+SECRET_KEY = os.getenv('SECRET_KEY', 'uma_chave_secreta_padrao')
+BACKEND_URL = os.getenv('BACKEND_URL', 'http://localhost:5000')
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 PORT = int(os.getenv('PORT', 5000))

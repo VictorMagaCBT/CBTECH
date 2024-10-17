@@ -1,17 +1,17 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from models import db, Cliente, Assistencia
+from models import db
 from api.routes import api
+from api.admin import setup_admin
+from api.commands import register_commands
 import config
 import logging
 
 # Configurar logging
 logging.basicConfig(level=logging.DEBUG)
 
-print("DATABASE_URL:", config.DATABASE_URL)
-
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": config.FRONTEND_URL}})
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # Permitir todas as origens para teste
 
 # Configure o PostgreSQL
 app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URL
@@ -21,20 +21,26 @@ app.config["SECRET_KEY"] = config.SECRET_KEY
 # Initialize the database
 db.init_app(app)
 
-# Teste de conexão com o banco de dados
-with app.app_context():
-    try:
-        db.engine.connect()
-        print("Conexão com o banco de dados bem-sucedida!")
-    except Exception as e:
-        print("Erro ao conectar ao banco de dados:", str(e))
-
 # Register the API blueprint
 app.register_blueprint(api, url_prefix='/api')
 
+# Setup admin
+setup_admin(app)
+
+# Register commands
+register_commands(app)
+
 @app.route('/')
-def home():
-    return jsonify({"message": "Bem-vindo à API da CBTECH"}), 200
+def index():
+    return jsonify({
+        "message": "Bem-vindo à API da CBTECH",
+        "endpoints": {
+            "admin": "/admin",
+            "api": "/api",
+            "clientes": "/api/clientes",
+            "assistencias": "/api/assistencias"
+        }
+    })
 
 @app.before_request
 def log_request_info():
@@ -48,4 +54,4 @@ def log_response_info(response):
     return response
 
 if __name__ == '__main__':
-      app.run(debug=config.DEBUG, port=config.PORT, host='0.0.0.0')
+    app.run(debug=config.DEBUG, port=config.PORT, host='0.0.0.0')

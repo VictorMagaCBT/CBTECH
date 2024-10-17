@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Wrench, Search } from 'lucide-react';
-import { api } from '../../api';
+import { api } from '../api';
 import "../styles/pages.css";
 import "../styles/forms.css";
 
