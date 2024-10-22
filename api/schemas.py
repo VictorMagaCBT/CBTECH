@@ -20,3 +20,8 @@ class AssistenciaSchema(Schema):
     cliente_id = fields.Int(required=True)
     data_entrada = fields.DateTime(dump_only=True)
     data_saida = fields.DateTime()
+
+cliente_schema = ClienteSchema()
+clientes_schema = ClienteSchema(many=True)
+assistencia_schema = AssistenciaSchema()
+assistencias_schema = AssistenciaSchema(many=True)

@@ -9,49 +9,65 @@ import logging
 
 # Configurar logging
 logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})  # Permitir todas as origens para teste
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
-# Configure o PostgreSQL
-app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URL
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SECRET_KEY"] = config.SECRET_KEY
+# Configuração do banco de dados
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
+app.config['SECRET_KEY'] = config.SECRET_KEY
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = config.SQLALCHEMY_ENGINE_OPTIONS
 
-# Initialize the database
+# Inicializar o banco de dados
 db.init_app(app)
 
-# Register the API blueprint
+# Registrar o blueprint da API
 app.register_blueprint(api, url_prefix='/api')
 
-# Setup admin
-setup_admin(app)
+# Configurar o admin
+admin = setup_admin(app)
 
-# Register commands
+# Registrar comandos
 register_commands(app)
 
 @app.route('/')
-def index():
+def root():
     return jsonify({
         "message": "Bem-vindo à API da CBTECH",
         "endpoints": {
-            "admin": "/admin",
             "api": "/api",
             "clientes": "/api/clientes",
-            "assistencias": "/api/assistencias"
+            "assistencias": "/api/assistencias",
+            "admin": "/admin"
+        }
+    })
+
+@app.route('/api')
+def api_root():
+    return jsonify({
+        "message": "Bem-vindo à API da CBTECH",
+        "endpoints": {
+            "clientes": "/api/clientes",
+            "assistencias": "/api/assistencias",
+            "admin": "/admin"
         }
     })
 
 @app.before_request
 def log_request_info():
-    app.logger.debug('Headers: %s', request.headers)
-    app.logger.debug('Body: %s', request.get_data())
+    logger.debug('Headers: %s', request.headers)
+    logger.debug('Body: %s', request.get_data())
 
 @app.after_request
 def log_response_info(response):
-    app.logger.debug('Response Status: %s', response.status)
-    app.logger.debug('Response: %s', response.get_data())
+    logger.debug('Response Status: %s', response.status)
+    logger.debug('Response: %s', response.get_data())
     return response
 
 if __name__ == '__main__':
-    app.run(debug=config.DEBUG, port=config.PORT, host='0.0.0.0')
+    logger.info(f"Iniciando a aplicação em modo {'DEBUG' if config.DEBUG else 'PRODUÇÃO'}")
+    logger.info(f"Porta: {config.PORT}")
+    logger.info(f"Database URI: {config.SQLALCHEMY_DATABASE_URI}")
+    app.run(debug=config.DEBUG, port=config.PORT)

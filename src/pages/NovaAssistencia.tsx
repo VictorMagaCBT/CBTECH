@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Wrench, Search } from 'lucide-react';
-import { api } from '../api';
+import { apiService } from '../api';
 import "../styles/pages.css";
 import "../styles/forms.css";
 
@@ -23,14 +23,17 @@ export const NovaAssistencia = () => {
     tecnico: '',
     valor: '',
   });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const response = await api.getClientes();
+        const response = await apiService.getClientes();
         setClientes(response.data);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error fetching clients:', err);
+        setError(`Erro ao buscar clientes: ${err.response?.data?.error || err.message}`);
       }
     };
     fetchClientes();
@@ -51,18 +54,21 @@ export const NovaAssistencia = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
     if (!selectedCliente) {
-      alert('Por favor, selecione um cliente.');
+      setError('Por favor, selecione um cliente.');
       return;
     }
     try {
       const assistenciaData = {
         ...formData,
         cliente_id: selectedCliente.id,
+        valor: parseFloat(formData.valor),
       };
-      const response = await api.createAssistencia(assistenciaData);
+      const response = await apiService.createAssistencia(assistenciaData);
       console.log('Assistência criada:', response.data);
-      alert('Assistência criada com sucesso!');
+      setSuccess('Assistência criada com sucesso!');
       // Reset form
       setSelectedCliente(null);
       setFormData({
@@ -74,9 +80,9 @@ export const NovaAssistencia = () => {
         tecnico: '',
         valor: '',
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error creating assistência:', err);
-      alert('Erro ao criar assistência.');
+      setError(`Erro ao criar assistência: ${err.response?.data?.error || err.message}`);
     }
   };
 
@@ -88,6 +94,9 @@ export const NovaAssistencia = () => {
     <div className="page nova-assistencia-page">
       <Wrench className="page-icon" />
       <h1>Nova Assistência</h1>
+      
+      {error && <div className="error-message">{error}</div>}
+      {success && <div className="success-message">{success}</div>}
       
       <div className="search-container">
         <Search className="search-icon" />

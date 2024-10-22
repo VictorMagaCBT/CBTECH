@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { UserPlus } from 'lucide-react';
-import { api } from '../api';
-import axios from 'axios';
+import { apiService } from '../api';
 import "../styles/pages.css";
 import "../styles/forms.css";
 
@@ -26,17 +25,13 @@ export const NovoCliente = () => {
     setSuccess('');
     try {
       console.log('Enviando dados:', formData);
-      const response = await api.createCliente(formData);
+      const response = await apiService.createCliente(formData);
       console.log('Response:', response);
       setSuccess('Cliente criado com sucesso!');
       setFormData({ nome: '', email: '', nif: '', telefone: '', morada: '' });
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error creating client:', err);
-      if (axios.isAxiosError(err)) {
-        setError(`Erro ao criar cliente: ${err.response?.data?.error || err.message}`);
-      } else {
-        setError('Erro desconhecido ao criar cliente');
-      }
+      setError(`Erro ao criar cliente: ${err.response?.data?.error || err.message}`);
     }
   };
 
