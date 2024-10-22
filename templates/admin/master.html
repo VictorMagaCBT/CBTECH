@@ -1,0 +1,109 @@
+{% extends 'admin/base.html' %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('admin_custom_css') }}">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f1c40f;
+            --info: #3498db;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar-default {
+            background-color: var(--primary) !important;
+            border-color: var(--primary-dark) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+
+        .navbar-default .navbar-brand,
+        .navbar-default .navbar-nav > li > a {
+            color: #ffffff !important;
+            font-weight: 500 !important;
+        }
+
+        .navbar-default .navbar-brand:hover,
+        .navbar-default .navbar-nav > li > a:hover {
+            color: #ffffff !important;
+            background-color: var(--primary-dark) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary-dark) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .table {
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1) !important;
+        }
+
+        .table thead th {
+            background-color: var(--primary) !important;
+            color: white !important;
+            border-bottom: none !important;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1) !important;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25) !important;
+        }
+
+        .modal-content {
+            border-radius: 8px !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+        }
+
+        .modal-header {
+            background-color: var(--primary) !important;
+            color: white !important;
+            border-radius: 8px 8px 0 0 !important;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #eee !important;
+            background-color: #f8f9fa !important;
+            border-radius: 0 0 8px 8px !important;
+        }
+
+        .alert {
+            border-radius: 8px !important;
+            border: none !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+
+        .pagination > li > a {
+            color: var(--primary) !important;
+        }
+
+        .pagination > .active > a {
+            background-color: var(--primary) !important;
+            border-color: var(--primary-dark) !important;
+            color: white !important;
+        }
+
+        .list-group-item.active {
+            background-color: var(--primary) !important;
+            border-color: var(--primary-dark) !important;
+        }
+    </style>
+{% endblock %}

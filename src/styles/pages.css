@@ -1,86 +1,197 @@
+/* Base styles */
 .page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #f3f4f6;
-    padding: 2rem;
-  }
-  
-  .page-icon {
-    width: 6rem;
-    height: 6rem;
-    margin-bottom: 1rem;
-  }
-  
-  h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #1f2937;
-    margin-bottom: 1rem;
-  }
-  
-  p {
-    color: #4b5563;
-  }
-
-
-/* Tablet styles */
-@media (max-width: 768px) {
-  .page {
-    padding: 1.5rem;
-  }
-
-  .page-icon {
-    width: 6rem;
-    height: 6rem;
-  }
-
-  .page h1 {
-    font-size: 2rem;
-  }
-
-  .page p {
-    font-size: 1rem;
-    max-width: 90%;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding: 2rem;
+  /* Adicionar padding-top para compensar o navbar fixo */
+  padding-top: 5rem;
 }
 
-/* Smartphone styles */
-@media (max-width: 480px) {
+.page-icon {
+  width: 3rem;
+  height: 3rem;
+  color: #3b82f6;
+  margin-bottom: 1.5rem;
+}
+
+.page h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Clientes List Styling */
+.clientes-list {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cliente-item {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border-left: 4px solid #3b82f6;
+  list-style: none;
+}
+
+.cliente-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.cliente-nome {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.cliente-info {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-label {
+  font-weight: 500;
+  color: #6b7280;
+  min-width: 80px;
+}
+
+.info-value {
+  color: #374151;
+}
+
+/* Pagination Styling */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  background: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.pagination-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 0.95rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+/* Loading and Error States */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  width: 100%;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .page {
     padding: 1rem;
   }
 
-  .page-icon {
-    width: 4rem;
-    height: 4rem;
+  .clientes-list {
+    grid-template-columns: 1fr;
   }
 
+  .cliente-item {
+    padding: 1.25rem;
+  }
+
+  .cliente-nome {
+    font-size: 1.1rem;
+  }
+
+  .pagination {
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
   .page h1 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
-  .page p {
-    font-size: 0.9rem;
-    max-width: 100%;
+  .cliente-item {
+    padding: 1rem;
   }
-}
 
-/* Specific styles for each page */
-.clientes-page .page-icon {
-  color: #3b82f6; /* blue */
-}
-
-.novo-cliente-page .page-icon {
-  color: #10b981; /* green */
-}
-
-.nova-assistencia-page .page-icon {
-  color: #f59e0b; /* yellow */
-}
-
-.pesquisar-page .page-icon {
-  color: #8b5cf6; /* purple */
+  .pagination-info {
+    font-size: 0.85rem;
+  }
 }

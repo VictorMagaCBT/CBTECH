@@ -1,5 +1,5 @@
 .navbar {
-  background-color: white;
+  background-color: rgb(246, 200, 1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
@@ -22,7 +22,7 @@
 
 .nav-link {
   padding: 1rem 0.5rem;
-  color: #4b5563;
+  color: black;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.3s, background-color 0.3s;

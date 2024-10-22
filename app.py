@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, render_template
 from flask_cors import CORS
 from models import db
 from api.routes import api
@@ -12,7 +12,13 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:5173", "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"],
+        "methods": ["GET", "POST", "PUT", "DELETE"],
+        "allow_headers": ["Content-Type"]
+    }
+}, supports_credentials=True)
 
 # Configuração do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
@@ -34,26 +40,11 @@ register_commands(app)
 
 @app.route('/')
 def root():
-    return jsonify({
-        "message": "Bem-vindo à API da CBTECH",
-        "endpoints": {
-            "api": "/api",
-            "clientes": "/api/clientes",
-            "assistencias": "/api/assistencias",
-            "admin": "/admin"
-        }
-    })
+    return render_template('index.html')
 
 @app.route('/api')
 def api_root():
-    return jsonify({
-        "message": "Bem-vindo à API da CBTECH",
-        "endpoints": {
-            "clientes": "/api/clientes",
-            "assistencias": "/api/assistencias",
-            "admin": "/admin"
-        }
-    })
+    return render_template('index.html')
 
 @app.before_request
 def log_request_info():

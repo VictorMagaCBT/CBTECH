@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}CBTECH API - Documentação{% endblock %}
+
+{% block content %}
+    <header class="header">
+        <i class="fas fa-microchip logo"></i>
+        <h1>API da CBTECH</h1>
+        <p>Sistema de Gestão de Serviços Técnicos de Informática</p>
+    </header>
+
+    <div class="grid">
+        <div class="card">
+            <h2><i class="fas fa-users"></i> Clientes</h2>
+            <p>Gerencie informações dos clientes da CBTECH.</p>
+            <ul class="endpoint-list">
+                <li class="endpoint-item">
+                    <span class="method get">GET</span>
+                    <code>/api/clientes</code>
+                    <p>Lista todos os clientes</p>
+                </li>
+                <li class="endpoint-item">
+                    <span class="method post">POST</span>
+                    <code>/api/clientes</code>
+                    <p>Criar novo cliente</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-tools"></i> Assistências</h2>
+            <p>Controle os serviços técnicos realizados.</p>
+            <ul class="endpoint-list">
+                <li class="endpoint-item">
+                    <span class="method get">GET</span>
+                    <code>/api/assistencias</code>
+                    <p>Lista todas as assistências</p>
+                </li>
+                <li class="endpoint-item">
+                    <span class="method post">POST</span>
+                    <code>/api/assistencias</code>
+                    <p>Registrar nova assistência</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-code"></i> Exemplo de Uso</h2>
+            <p>Como utilizar a API com Python:</p>
+            <pre><code>import requests
+
+# Configuração base
+BASE_URL = 'http://localhost:5000/api'
+
+# Listar clientes
+response = requests.get(f'{BASE_URL}/clientes')
+clientes = response.json()
+
+# Criar cliente
+novo_cliente = {
+    "nome": "João Silva",
+    "email": "joao@example.com",
+    "nif": "123456789",
+    "telefone": "912345678",
+    "morada": "Rua Example, 123"
+}
+response = requests.post(
+    f'{BASE_URL}/clientes', 
+    json=novo_cliente
+)</code></pre>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-cog"></i> Administração</h2>
+            <p>Acesse o painel administrativo para gerenciar todos os recursos.</p>
+            <ul class="endpoint-list">
+                <li class="endpoint-item">
+                    <span class="method get">GET</span>
+                    <code>/admin</code>
+                    <p>Painel de Administração</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 CBTECH - Serviços Técnicos de Informática</p>
+    </footer>
+{% endblock %}
