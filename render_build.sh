@@ -2,6 +2,12 @@
 # exit on error
 set -o errexit
 
+# Atualizar pip
+python -m pip install --upgrade pip
+
+# Instalar wheel primeiro
+pip install wheel
+
 # Instalar dependências Python
 pip install -r requirements.txt
 
