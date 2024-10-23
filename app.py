@@ -12,13 +12,20 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+
 CORS(app, resources={
     r"/api/*": {
-        "origins": ["http://localhost:5173", "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"],
+        "origins": [
+            "http://localhost:5173",
+            "https://sua-app.vercel.app",  # Domínio do Vercel
+            "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"
+        ],
         "methods": ["GET", "POST", "PUT", "DELETE"],
         "allow_headers": ["Content-Type"]
     }
 }, supports_credentials=True)
+
 
 # Configuração do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
