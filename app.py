@@ -18,8 +18,9 @@ CORS(app, resources={
     r"/api/*": {
         "origins": [
             "http://localhost:5173",
-            "https://sua-app.vercel.app",  # Domínio do Vercel
+            "https://cbtech.vercel.app",  # Domínio do Vercel
             "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"
+            "https://cbtech.netlify.app"
         ],
         "methods": ["GET", "POST", "PUT", "DELETE"],
         "allow_headers": ["Content-Type"]
