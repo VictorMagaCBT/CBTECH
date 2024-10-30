@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://cbtech-f.onrender.com/api';
 
 console.log('API_URL:', API_URL);
 
@@ -9,22 +9,34 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  // Removido withCredentials pois não estamos usando cookies/sessões
   withCredentials: true,
 });
 
 api.interceptors.request.use(request => {
-  console.log('Starting Request', request)
-  return request
-})
+  console.log('Starting Request', request);
+  return request;
+});
 
 api.interceptors.response.use(
-  (response) => {
-    // If the response is successful, return the entire response
+  response => {
+    console.log('Response:', response);
     return response;
   },
-  (error) => {
-    // If there's an error, reject with the error
+  error => {
+    console.error('Response Error:', error);
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error('Error Data:', error.response.data);
+      console.error('Error Status:', error.response.status);
+      console.error('Error Headers:', error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('Error Request:', error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error Message:', error.message);
+    }
     return Promise.reject(error);
   }
 );
@@ -33,7 +45,8 @@ export const apiService = {
   // Clientes
   getClientes: async () => {
     try {
-      return await api.get('/clientes');
+      const response = await api.get('/clientes');
+      return response.data;
     } catch (error) {
       console.error('Error fetching clientes:', error);
       throw error;

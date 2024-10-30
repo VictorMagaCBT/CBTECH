@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, Mail, Phone, Building, CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../api';
@@ -25,24 +25,22 @@ export const Clientes = () => {
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const response = await apiService.getClientes();
-        // Check if response exists and has data property
-        if (response && response.data) {
-          const sortedClientes = response.data.sort((a: Cliente, b: Cliente) => 
+        const data = await apiService.getClientes();
+        if (Array.isArray(data)) {
+          const sortedClientes = [...data].sort((a, b) => 
             a.nome.localeCompare(b.nome)
           );
           setClientes(sortedClientes);
         } else {
-          setClientes([]); // Set empty array if no data
+          setError('Formato de dados inválido');
         }
-        setLoading(false);
       } catch (err: any) {
-        setError(`Falha ao buscar clientes: ${err.response?.data?.error || err.message}`);
+        setError(`Falha ao buscar clientes: ${err.message}`);
+      } finally {
         setLoading(false);
-        setClientes([]); // Set empty array on error
       }
     };
-    
+
     fetchClientes();
   }, []);
 
