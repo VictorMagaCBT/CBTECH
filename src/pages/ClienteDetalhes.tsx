@@ -10,14 +10,14 @@ interface Assistencia {
   marca: string;
   modelo: string;
   imei: string;
+  codigo_seguranca: string;
   avaria: string;
-  observacoes: string | null;
+  observacoes: string;
   tecnico: string;
   valor: number;
+  estado: string;
   data_entrada: string;
   data_saida: string | null;
-  codigo_seguranca: string;
-  estado: string;
 }
 
 interface Cliente {
@@ -34,18 +34,21 @@ export const ClienteDetalhes: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [cliente, setCliente] = useState<Cliente | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchClienteDetalhes = async () => {
-      if (!id) return;
-      
       try {
+        if (!id) return;
         const response = await apiService.getClienteById(Number(id));
-        setCliente(response.data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar detalhes do cliente');
+        if (response?.data) {
+          setCliente(response.data);
+        } else {
+          setError('Cliente não encontrado');
+        }
+      } catch (err: any) {
+        setError(`Erro ao carregar detalhes do cliente: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -84,13 +87,13 @@ export const ClienteDetalhes: React.FC = () => {
 
   return (
     <div className="page cliente-detalhes">
-      <User className="page-icon" />
-      <h1>Detalhes do Cliente</h1>
-
       <button className="voltar-button" onClick={handleVoltar}>
         <ArrowLeft size={20} />
         Voltar para Clientes
       </button>
+
+      <User className="page-icon" />
+      <h1>Detalhes do Cliente</h1>
 
       <div className="cliente-card">
         <h2 className="cliente-nome">{cliente.nome}</h2>
@@ -119,7 +122,11 @@ export const ClienteDetalhes: React.FC = () => {
         {cliente.assistencias && cliente.assistencias.length > 0 ? (
           <div className="assistencias-grid">
             {cliente.assistencias.map((assistencia) => (
-              <div key={assistencia.id} className="assistencia-card">
+              <div 
+                key={assistencia.id} 
+                className="assistencia-card"
+                onClick={() => navigate(`/assistencia/${assistencia.id}`)}
+              >
                 <div className="assistencia-header">
                   <Wrench size={20} />
                   <h3>{assistencia.marca} {assistencia.modelo}</h3>
@@ -143,15 +150,15 @@ export const ClienteDetalhes: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
               </div>
             ))}
           </div>
         ) : (
-          <p className="no-assistencias">Nenhuma assistência registrada</p>
+          <div className="no-assistencias">
+            Nenhuma assistência registrada para este cliente.
+          </div>
         )}
       </div>
     </div>
   );
 };
-
