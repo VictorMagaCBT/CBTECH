@@ -6,6 +6,7 @@ import { Clientes } from './pages/Clientes';
 import { ClienteDetalhes } from './pages/ClienteDetalhes';
 import { NovoCliente } from './pages/NovoCliente';
 import { NovaAssistencia } from './pages/NovaAssistencia';
+import { AssistenciaDetalhes } from './pages/AssistenciaDetalhes';
 import { Pesquisar } from './pages/Pesquisar';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/cliente/:id" element={<ClienteDetalhes />} />
           <Route path="/novoCliente" element={<NovoCliente />} />
           <Route path="/novaAssistencia" element={<NovaAssistencia />} />
+          <Route path="/assistencia/:id" element={<AssistenciaDetalhes />} />
           <Route path="/pesquisar" element={<Pesquisar />} />
         </Routes>
       </div>

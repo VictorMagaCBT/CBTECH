@@ -7,7 +7,6 @@ import logging
 api = Blueprint('api', __name__)
 logger = logging.getLogger(__name__)
 
-# Endpoints existentes
 @api.route('/clientes', methods=['GET', 'POST'])
 def handle_clientes():
     logger.info("Clientes route accessed")
@@ -34,7 +33,10 @@ def handle_clientes():
 def get_cliente(id):
     try:
         cliente = Cliente.query.get_or_404(id)
-        return jsonify(cliente_schema.dump(cliente))
+        result = cliente_schema.dump(cliente)
+        # Include assistências in the response
+        result['assistencias'] = assistencias_schema.dump(cliente.assistencias)
+        return jsonify(result)
     except Exception as e:
         logger.error(f"Erro ao buscar cliente {id}: {str(e)}")
         return jsonify({"error": str(e)}), 404
@@ -58,8 +60,9 @@ def handle_assistencias():
             return jsonify({"error": str(e)}), 400
     
     assistencias = Assistencia.query.all()
+    result = assistencias_schema.dump(assistencias)
     logger.info(f"Retornando {len(assistencias)} assistências")
-    return jsonify(assistencias_schema.dump(assistencias))
+    return jsonify(result)
 
 # Novos endpoints de pesquisa
 @api.route('/clientes/search', methods=['GET'])

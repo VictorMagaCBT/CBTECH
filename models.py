@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, Enum
 from datetime import datetime
 import config
 
@@ -23,10 +23,12 @@ class Assistencia(db.Model):
     marca = db.Column(db.String(50), nullable=False)
     modelo = db.Column(db.String(50), nullable=False)
     imei = db.Column(db.String(20), nullable=False)
+    codigo_seguranca = db.Column(db.String(50), nullable=False)
     avaria = db.Column(db.String(200), nullable=False)
     observacoes = db.Column(db.Text)
     tecnico = db.Column(db.String(100), nullable=False)
     valor = db.Column(db.Float, nullable=False)
+    estado = db.Column(Enum('orçamentado', 'reparado', 'entregue', name='estado_assistencia'), nullable=False)
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
     data_entrada = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     data_saida = db.Column(db.DateTime)

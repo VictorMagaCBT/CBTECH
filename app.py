@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 from flask_cors import CORS
+from flask_migrate import Migrate
 from models import db
 from api.routes import api
 from api.admin import setup_admin
@@ -13,37 +14,35 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
+# Configuração CORS atualizada
 
-CORS(app, resources={
-    r"/api/*": {
-        "origins": [
-            "http://localhost:5173",
-            "https://cbtech.vercel.app",  # Domínio do Vercel
-            "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"
-            "https://cbtech.netlify.app"
-        ],
-        "methods": ["GET", "POST", "PUT", "DELETE"],
-        "allow_headers": ["Content-Type"]
-    }
-}, supports_credentials=True)
-
-
-# Configuração do banco de dados
+# Configuração CORS atualizada
+CORS(app, 
+     resources={
+         r"/api/*": {
+             "origins": [
+                 "http://localhost:5173",
+                 "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"
+             ],
+             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+             "allow_headers": ["Content-Type", "Authorization"],
+             "supports_credentials": True,
+             "expose_headers": ["Content-Range", "X-Content-Range"]
+         }
+     },
+     supports_credentials=True
+)
+# Resto das configurações
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
 app.config['SECRET_KEY'] = config.SECRET_KEY
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = config.SQLALCHEMY_ENGINE_OPTIONS
 
-# Inicializar o banco de dados
+
 db.init_app(app)
-
-# Registrar o blueprint da API
+migrate = Migrate(app, db)
 app.register_blueprint(api, url_prefix='/api')
-
-# Configurar o admin
 admin = setup_admin(app)
-
-# Registrar comandos
 register_commands(app)
 
 @app.route('/')

@@ -16,6 +16,8 @@ interface Assistencia {
   valor: number;
   data_entrada: string;
   data_saida: string | null;
+  codigo_seguranca: string;
+  estado: string;
 }
 
 interface Cliente {
@@ -123,26 +125,25 @@ export const ClienteDetalhes: React.FC = () => {
                   <h3>{assistencia.marca} {assistencia.modelo}</h3>
                 </div>
                 <div className="assistencia-content">
-                  <p className="imei"><strong>IMEI:</strong> {assistencia.imei}</p>
-                  <p className="avaria"><strong>Avaria:</strong> {assistencia.avaria}</p>
+                  <p><strong>IMEI:</strong> {assistencia.imei}</p>
+                  <p><strong>Avaria:</strong> {assistencia.avaria}</p>
+                  <p><strong>Técnico:</strong> {assistencia.tecnico}</p>
+                  <p><strong>Estado:</strong> {assistencia.estado}</p>
                   {assistencia.observacoes && (
-                    <p className="observacoes"><strong>Observações:</strong> {assistencia.observacoes}</p>
+                    <p><strong>Observações:</strong> {assistencia.observacoes}</p>
                   )}
-                  <p className="tecnico"><strong>Técnico:</strong> {assistencia.tecnico}</p>
                   <div className="assistencia-footer">
                     <div className="data">
                       <Calendar size={16} />
-                      <span>Entrada: {new Date(assistencia.data_entrada).toLocaleDateString()}</span>
-                      {assistencia.data_saida && (
-                        <span>Saída: {new Date(assistencia.data_saida).toLocaleDateString()}</span>
-                      )}
+                      {new Date(assistencia.data_entrada).toLocaleDateString()}
                     </div>
                     <div className="valor">
                       <DollarSign size={16} />
-                      <span>{assistencia.valor.toFixed(2)}€</span>
+                      €{assistencia.valor.toFixed(2)}
                     </div>
                   </div>
                 </div>
+
               </div>
             ))}
           </div>

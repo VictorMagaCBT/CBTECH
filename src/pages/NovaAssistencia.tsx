@@ -18,10 +18,12 @@ export const NovaAssistencia = () => {
     marca: '',
     modelo: '',
     imei: '',
+    codigo_seguranca: '',
     avaria: '',
     observacoes: '',
     tecnico: '',
     valor: '',
+    estado: 'orçamentado'
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -52,6 +54,10 @@ export const NovaAssistencia = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleEstadoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, estado: e.target.value });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -75,10 +81,12 @@ export const NovaAssistencia = () => {
         marca: '',
         modelo: '',
         imei: '',
+        codigo_seguranca: '',
         avaria: '',
         observacoes: '',
         tecnico: '',
         valor: '',
+        estado: 'orçamentado'
       });
     } catch (err: any) {
       console.error('Error creating assistência:', err);
@@ -162,6 +170,17 @@ export const NovaAssistencia = () => {
               />
             </div>
             <div className="form-group">
+              <label htmlFor="codigo_seguranca">Código de Segurança</label>
+              <input
+                type="text"
+                id="codigo_seguranca"
+                name="codigo_seguranca"
+                value={formData.codigo_seguranca}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="form-group">
               <label htmlFor="tecnico">Técnico</label>
               <input
                 type="text"
@@ -206,6 +225,41 @@ export const NovaAssistencia = () => {
                 step="0.01"
                 required
               />
+            </div>
+            <div className="form-group">
+              <label>Estado</label>
+              <div className="radio-group">
+                <label>
+                  <input
+                    type="radio"
+                    name="estado"
+                    value="orçamentado"
+                    checked={formData.estado === 'orçamentado'}
+                    onChange={handleEstadoChange}
+                  />
+                  Orçamentado
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="estado"
+                    value="reparado"
+                    checked={formData.estado === 'reparado'}
+                    onChange={handleEstadoChange}
+                  />
+                  Reparado
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="estado"
+                    value="entregue"
+                    checked={formData.estado === 'entregue'}
+                    onChange={handleEstadoChange}
+                  />
+                  Entregue
+                </label>
+              </div>
             </div>
           </div>
         </div>
