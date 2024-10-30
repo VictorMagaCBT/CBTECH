@@ -43,14 +43,20 @@ export const ClienteDetalhes: React.FC = () => {
       try {
         if (!id) return;
         const response = await apiService.getClienteById(Number(id));
-        console.log('API Response:', response); // Debug log
-        if (response) {
+        console.log('API Response:', response);
+        
+        // Check if response exists and has the required fields
+        if (response && response.data) {
           setCliente(response.data);
+          setError(''); // Clear any previous errors
         } else {
           setError('Cliente não encontrado');
+          setCliente(null);
         }
       } catch (err: any) {
+        console.error('Error fetching client:', err);
         setError(`Erro ao carregar detalhes do cliente: ${err.message}`);
+        setCliente(null);
       } finally {
         setLoading(false);
       }
