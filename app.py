@@ -22,7 +22,7 @@ CORS(app,
          r"/api/*": {
              "origins": [
                  "http://localhost:5173",
-                 "https://your-netlify-app.netlify.app"  # Add your Netlify domain
+                 "https://cbtechapp.netlify.app/"  # Add your Netlify domain
              ],
              "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
              "allow_headers": ["Content-Type", "Authorization"],
