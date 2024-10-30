@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, Response, request
 from flask_cors import CORS
 from flask_migrate import Migrate
 from models import db
@@ -20,13 +20,11 @@ CORS(app,
          r"/api/*": {
              "origins": [
                  "http://localhost:5173",
-                 "https://cbtechapp.netlify.app",
-                 "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"
+                 "https://cbtechapp.netlify.app"
              ],
              "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
              "allow_headers": ["Content-Type", "Authorization"],
-             "supports_credentials": True,
-             "expose_headers": ["Content-Range", "X-Content-Range"]
+             "supports_credentials": True
          }
      },
      supports_credentials=True
@@ -40,13 +38,12 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = config.SQLALCHEMY_ENGINE_OPTIONS
 
 @app.after_request
 def after_request(response: Response) -> Response:
-    # Add CORS headers to every response
     origin = request.headers.get('Origin')
     if origin in ["http://localhost:5173", "https://cbtechapp.netlify.app"]:
         response.headers.add('Access-Control-Allow-Origin', origin)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
     return response
 
 db.init_app(app)

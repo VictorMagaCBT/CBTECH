@@ -7,17 +7,14 @@ console.log('API_URL:', API_URL);
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
-  withCredentials: true,
+  withCredentials: true
 });
 
-// Add request interceptor to handle CORS preflight
+// Remove the custom headers from request interceptor as they're handled by the server
 api.interceptors.request.use(
   config => {
-    // Add CORS headers to every request
-    config.headers['Access-Control-Allow-Origin'] = 'https://cbtechapp.netlify.app';
-    config.headers['Access-Control-Allow-Credentials'] = 'true';
     return config;
   },
   error => {
@@ -46,7 +43,7 @@ api.interceptors.response.use(
 );
 
 export const apiService = {
-  // Clientes
+  // Rest of the code remains the same
   getClientes: async () => {
     try {
       const response = await api.get('/clientes');
