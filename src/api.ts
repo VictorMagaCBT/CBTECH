@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 console.log('API_URL:', API_URL);
 
@@ -10,7 +10,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
   // Removido withCredentials pois não estamos usando cookies/sessões
-  withCredentials: false
+  withCredentials: true,
 });
 
 api.interceptors.request.use(request => {
@@ -18,20 +18,22 @@ api.interceptors.request.use(request => {
   return request
 })
 
-api.interceptors.response.use(response => {
-  console.log('Response:', response)
-  return response
-}, error => {
-  console.error('Response Error:', error)
-  return Promise.reject(error)
-})
+api.interceptors.response.use(
+  (response) => {
+    // If the response is successful, return the entire response
+    return response;
+  },
+  (error) => {
+    // If there's an error, reject with the error
+    return Promise.reject(error);
+  }
+);
 
 export const apiService = {
   // Clientes
   getClientes: async () => {
     try {
-      const response = await api.get('/clientes');
-      return response.data;
+      return await api.get('/clientes');
     } catch (error) {
       console.error('Error fetching clientes:', error);
       throw error;

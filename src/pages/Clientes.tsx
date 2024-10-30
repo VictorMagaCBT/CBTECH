@@ -26,17 +26,23 @@ export const Clientes = () => {
     const fetchClientes = async () => {
       try {
         const response = await apiService.getClientes();
-        const sortedClientes = response.data.sort((a: Cliente, b: Cliente) => 
-          a.nome.localeCompare(b.nome)
-        );
-        setClientes(sortedClientes);
+        // Check if response exists and has data property
+        if (response && response.data) {
+          const sortedClientes = response.data.sort((a: Cliente, b: Cliente) => 
+            a.nome.localeCompare(b.nome)
+          );
+          setClientes(sortedClientes);
+        } else {
+          setClientes([]); // Set empty array if no data
+        }
         setLoading(false);
       } catch (err: any) {
         setError(`Falha ao buscar clientes: ${err.response?.data?.error || err.message}`);
         setLoading(false);
+        setClientes([]); // Set empty array on error
       }
     };
-
+    
     fetchClientes();
   }, []);
 

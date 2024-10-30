@@ -32,10 +32,16 @@ export const NovaAssistencia = () => {
     const fetchClientes = async () => {
       try {
         const response = await apiService.getClientes();
-        setClientes(response.data);
+        // Check if response exists and has data property
+        if (response && response.data) {
+          setClientes(response.data);
+        } else {
+          setClientes([]); // Set empty array if no data
+        }
       } catch (err: any) {
         console.error('Error fetching clients:', err);
         setError(`Erro ao buscar clientes: ${err.response?.data?.error || err.message}`);
+        setClientes([]); // Set empty array on error
       }
     };
     fetchClientes();
@@ -94,9 +100,9 @@ export const NovaAssistencia = () => {
     }
   };
 
-  const filteredClientes = clientes.filter(cliente =>
+  const filteredClientes = clientes ? clientes.filter(cliente =>
     cliente.nome.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ) : [];
 
   return (
     <div className="page nova-assistencia-page">

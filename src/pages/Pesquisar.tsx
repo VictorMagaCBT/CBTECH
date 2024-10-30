@@ -93,8 +93,8 @@ export const Pesquisar = () => {
     if ('nome' in sugestao) {
       handleClienteClick(sugestao.id);
     } else {
-      setResultados([sugestao]);
-      setSugestoes([]);
+      // Navigate to AssistenciaDetalhes instead of setting results
+      navigate(`/assistencia/${sugestao.id}`);
     }
   };
 
@@ -217,12 +217,14 @@ export const Pesquisar = () => {
         <div className="resultados-container">
           <h2>Resultados da Pesquisa</h2>
           <div className="resultados-grid">
-            {resultados.map((resultado: any) => (
-              <div 
-                key={resultado.id} 
-                className="resultado-card"
-                onClick={() => 'nome' in resultado ? handleClienteClick(resultado.id) : null}
-              >
+          {resultados.map((resultado: any) => (
+            <div 
+              key={resultado.id} 
+              className="resultado-card"
+              onClick={() => 'nome' in resultado ? 
+                handleClienteClick(resultado.id) : 
+                navigate(`/assistencia/${resultado.id}`)}
+            >
                 {'nome' in resultado ? (
                   <>
                     <div className="card-header">

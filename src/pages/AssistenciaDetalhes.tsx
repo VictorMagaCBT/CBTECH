@@ -1,6 +1,8 @@
+// In src/pages/AssistenciaDetalhes.tsx
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Wrench, ArrowLeft } from 'lucide-react';
+import { Wrench, ArrowLeft, Calendar, DollarSign } from 'lucide-react';
 import { apiService } from '../api';
 import "../styles/pages.css";
 import "../styles/assistencia-detalhes.css";
@@ -15,7 +17,7 @@ interface Assistencia {
   observacoes: string;
   tecnico: string;
   valor: number;
-  estado: string;
+  estado: 'orçamentado' | 'reparado' | 'entregue';
   data_entrada: string;
   data_saida: string | null;
   cliente: {
@@ -56,7 +58,7 @@ export const AssistenciaDetalhes = () => {
   };
 
   const handleEstadoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, estado: e.target.value });
+    setFormData({ ...formData, estado: e.target.value as Assistencia['estado'] });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

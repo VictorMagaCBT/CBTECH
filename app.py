@@ -20,13 +20,18 @@ app = Flask(__name__)
 CORS(app, 
      resources={
          r"/api/*": {
-             "origins": "*",
+             "origins": [
+                 "http://localhost:5173",
+                 "https://your-netlify-app.netlify.app"  # Add your Netlify domain
+             ],
              "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
              "allow_headers": ["Content-Type", "Authorization"],
              "supports_credentials": True,
              "expose_headers": ["Content-Range", "X-Content-Range"]
          }
-     })
+     },
+     supports_credentials=True
+)
 # Resto das configurações
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
