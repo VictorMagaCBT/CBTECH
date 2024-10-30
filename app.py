@@ -20,18 +20,13 @@ app = Flask(__name__)
 CORS(app, 
      resources={
          r"/api/*": {
-             "origins": [
-                 "http://localhost:5173",
-                 "https://stunning-carnival-pvx6547vqqxcrqx-5173.app.github.dev"
-             ],
+             "origins": "*",
              "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
              "allow_headers": ["Content-Type", "Authorization"],
              "supports_credentials": True,
              "expose_headers": ["Content-Range", "X-Content-Range"]
          }
-     },
-     supports_credentials=True
-)
+     })
 # Resto das configurações
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS

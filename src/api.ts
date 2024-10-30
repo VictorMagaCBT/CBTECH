@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 console.log('API_URL:', API_URL);
 
@@ -9,7 +9,8 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  // Removido withCredentials pois não estamos usando cookies/sessões
+  withCredentials: false
 });
 
 api.interceptors.request.use(request => {
@@ -30,7 +31,7 @@ export const apiService = {
   getClientes: async () => {
     try {
       const response = await api.get('/clientes');
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error fetching clientes:', error);
       throw error;
@@ -40,7 +41,7 @@ export const apiService = {
   getClienteById: async (id: number) => {
     try {
       const response = await api.get(`/clientes/${id}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error fetching cliente ${id}:`, error);
       throw error;
@@ -50,7 +51,7 @@ export const apiService = {
   createCliente: async (data: any) => {
     try {
       const response = await api.post('/clientes', data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error creating cliente:', error);
       throw error;
@@ -60,7 +61,7 @@ export const apiService = {
   updateCliente: async (id: number, data: any) => {
     try {
       const response = await api.put(`/clientes/${id}`, data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error updating cliente:', error);
       throw error;
@@ -70,7 +71,7 @@ export const apiService = {
   deleteCliente: async (id: number) => {
     try {
       const response = await api.delete(`/clientes/${id}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error deleting cliente:', error);
       throw error;
@@ -80,7 +81,7 @@ export const apiService = {
   searchClientes: async (query: { nome?: string; telefone?: string }) => {
     try {
       const response = await api.get('/clientes/search', { params: query });
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error searching clientes:', error);
       throw error;
@@ -91,7 +92,7 @@ export const apiService = {
   getAssistencias: async () => {
     try {
       const response = await api.get('/assistencias');
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error fetching assistências:', error);
       throw error;
@@ -101,7 +102,7 @@ export const apiService = {
   getAssistenciaById: async (id: number) => {
     try {
       const response = await api.get(`/assistencias/${id}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`Error fetching assistência ${id}:`, error);
       throw error;
@@ -111,7 +112,7 @@ export const apiService = {
   createAssistencia: async (data: any) => {
     try {
       const response = await api.post('/assistencias', data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error creating assistência:', error);
       throw error;
@@ -121,7 +122,7 @@ export const apiService = {
   updateAssistencia: async (id: number, data: any) => {
     try {
       const response = await api.put(`/assistencias/${id}`, data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error updating assistência:', error);
       throw error;
@@ -131,7 +132,7 @@ export const apiService = {
   deleteAssistencia: async (id: number) => {
     try {
       const response = await api.delete(`/assistencias/${id}`);
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error deleting assistência:', error);
       throw error;
@@ -141,7 +142,7 @@ export const apiService = {
   searchAssistencias: async (query: { marca?: string; modelo?: string }) => {
     try {
       const response = await api.get('/assistencias/search', { params: query });
-      return response;
+      return response.data;
     } catch (error) {
       console.error('Error searching assistências:', error);
       throw error;
