@@ -42,7 +42,7 @@ export const ClienteDetalhes: React.FC = () => {
       try {
         if (!id) return;
         const response = await apiService.getClienteById(Number(id));
-        if (response?.data) {
+        if (response.data) {
           setCliente(response.data);
         } else {
           setError('Cliente não encontrado');
