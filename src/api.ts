@@ -24,7 +24,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     console.log('Response:', response);
-    return response.data; // Return only the data part of the response
+    return response; // Return only the data part of the response
   },
   error => {
     console.error('Response Error:', error);
