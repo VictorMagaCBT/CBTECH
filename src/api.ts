@@ -12,7 +12,6 @@ const api = axios.create({
   withCredentials: true
 });
 
-// Remove the custom headers from request interceptor as they're handled by the server
 api.interceptors.request.use(
   config => {
     return config;
@@ -25,7 +24,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     console.log('Response:', response);
-    return response;
+    return response.data; // Return only the data part of the response
   },
   error => {
     console.error('Response Error:', error);
@@ -43,11 +42,9 @@ api.interceptors.response.use(
 );
 
 export const apiService = {
-  // Rest of the code remains the same
   getClientes: async () => {
     try {
-      const response = await api.get('/clientes');
-      return response.data;
+      return await api.get('/clientes');
     } catch (error) {
       console.error('Error fetching clientes:', error);
       throw error;
@@ -56,8 +53,7 @@ export const apiService = {
 
   getClienteById: async (id: number) => {
     try {
-      const response = await api.get(`/clientes/${id}`);
-      return response.data;
+      return await api.get(`/clientes/${id}`);
     } catch (error) {
       console.error(`Error fetching cliente ${id}:`, error);
       throw error;
@@ -66,8 +62,7 @@ export const apiService = {
 
   createCliente: async (data: any) => {
     try {
-      const response = await api.post('/clientes', data);
-      return response.data;
+      return await api.post('/clientes', data);
     } catch (error) {
       console.error('Error creating cliente:', error);
       throw error;
@@ -76,8 +71,7 @@ export const apiService = {
 
   updateCliente: async (id: number, data: any) => {
     try {
-      const response = await api.put(`/clientes/${id}`, data);
-      return response.data;
+      return await api.put(`/clientes/${id}`, data);
     } catch (error) {
       console.error('Error updating cliente:', error);
       throw error;
@@ -86,8 +80,7 @@ export const apiService = {
 
   deleteCliente: async (id: number) => {
     try {
-      const response = await api.delete(`/clientes/${id}`);
-      return response.data;
+      return await api.delete(`/clientes/${id}`);
     } catch (error) {
       console.error('Error deleting cliente:', error);
       throw error;
@@ -96,19 +89,16 @@ export const apiService = {
 
   searchClientes: async (query: { nome?: string; telefone?: string }) => {
     try {
-      const response = await api.get('/clientes/search', { params: query });
-      return response.data;
+      return await api.get('/clientes/search', { params: query });
     } catch (error) {
       console.error('Error searching clientes:', error);
       throw error;
     }
   },
 
-  // Assistências
   getAssistencias: async () => {
     try {
-      const response = await api.get('/assistencias');
-      return response.data;
+      return await api.get('/assistencias');
     } catch (error) {
       console.error('Error fetching assistências:', error);
       throw error;
@@ -117,8 +107,7 @@ export const apiService = {
 
   getAssistenciaById: async (id: number) => {
     try {
-      const response = await api.get(`/assistencias/${id}`);
-      return response.data;
+      return await api.get(`/assistencias/${id}`);
     } catch (error) {
       console.error(`Error fetching assistência ${id}:`, error);
       throw error;
@@ -127,8 +116,7 @@ export const apiService = {
 
   createAssistencia: async (data: any) => {
     try {
-      const response = await api.post('/assistencias', data);
-      return response.data;
+      return await api.post('/assistencias', data);
     } catch (error) {
       console.error('Error creating assistência:', error);
       throw error;
@@ -137,8 +125,7 @@ export const apiService = {
 
   updateAssistencia: async (id: number, data: any) => {
     try {
-      const response = await api.put(`/assistencias/${id}`, data);
-      return response.data;
+      return await api.put(`/assistencias/${id}`, data);
     } catch (error) {
       console.error('Error updating assistência:', error);
       throw error;
@@ -147,8 +134,7 @@ export const apiService = {
 
   deleteAssistencia: async (id: number) => {
     try {
-      const response = await api.delete(`/assistencias/${id}`);
-      return response.data;
+      return await api.delete(`/assistencias/${id}`);
     } catch (error) {
       console.error('Error deleting assistência:', error);
       throw error;
@@ -157,8 +143,7 @@ export const apiService = {
 
   searchAssistencias: async (query: { marca?: string; modelo?: string }) => {
     try {
-      const response = await api.get('/assistencias/search', { params: query });
-      return response.data;
+      return await api.get('/assistencias/search', { params: query });
     } catch (error) {
       console.error('Error searching assistências:', error);
       throw error;

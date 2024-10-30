@@ -5,6 +5,7 @@ import { apiService } from '../api';
 import "../styles/pages.css";
 import "../styles/cliente-detalhes.css";
 
+
 interface Assistencia {
   id: number;
   marca: string;
@@ -42,7 +43,8 @@ export const ClienteDetalhes: React.FC = () => {
       try {
         if (!id) return;
         const response = await apiService.getClienteById(Number(id));
-        if (response.data) {
+        console.log('API Response:', response); // Debug log
+        if (response) {
           setCliente(response.data);
         } else {
           setError('Cliente não encontrado');
