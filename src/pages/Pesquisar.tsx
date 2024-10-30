@@ -41,7 +41,7 @@ export const Pesquisar = () => {
       try {
         if (searchType === 'cliente' && (clienteQuery.nome || clienteQuery.telefone)) {
           const response = await apiService.searchClientes(clienteQuery);
-          setSugestoes(response?.data || []);
+          setSugestoes(response.data || []);
         } else if (searchType === 'assistencia' && (assistenciaQuery.marca || assistenciaQuery.modelo)) {
           const response = await apiService.searchAssistencias(assistenciaQuery);
           setSugestoes(response?.data || []);
@@ -66,7 +66,7 @@ export const Pesquisar = () => {
       } else {
         response = await apiService.searchAssistencias(assistenciaQuery);
       }
-      setResultados(response?.data || []);
+      setResultados(response.data || []);
       setSugestoes([]); // Clear suggestions after search
     } catch (err: any) {
       setError(`Erro na pesquisa: ${err.message}`);
