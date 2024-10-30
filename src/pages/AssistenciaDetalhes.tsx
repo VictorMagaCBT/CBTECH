@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Wrench, ArrowLeft, Calendar, DollarSign } from 'lucide-react';
+import { Wrench, ArrowLeft } from 'lucide-react';
 import { apiService } from '../api';
 import "../styles/pages.css";
 import "../styles/assistencia-detalhes.css";

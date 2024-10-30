@@ -12,10 +12,18 @@ const api = axios.create({
   withCredentials: true,
 });
 
-api.interceptors.request.use(request => {
-  console.log('Starting Request', request);
-  return request;
-});
+// Add request interceptor to handle CORS preflight
+api.interceptors.request.use(
+  config => {
+    // Add CORS headers to every request
+    config.headers['Access-Control-Allow-Origin'] = 'https://cbtechapp.netlify.app';
+    config.headers['Access-Control-Allow-Credentials'] = 'true';
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
 
 api.interceptors.response.use(
   response => {
@@ -25,16 +33,12 @@ api.interceptors.response.use(
   error => {
     console.error('Response Error:', error);
     if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       console.error('Error Data:', error.response.data);
       console.error('Error Status:', error.response.status);
       console.error('Error Headers:', error.response.headers);
     } else if (error.request) {
-      // The request was made but no response was received
       console.error('Error Request:', error.request);
     } else {
-      // Something happened in setting up the request that triggered an Error
       console.error('Error Message:', error.message);
     }
     return Promise.reject(error);
