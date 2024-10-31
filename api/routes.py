@@ -114,3 +114,16 @@ def handle_assistencias():
     result = assistencias_schema.dump(assistencias)
     logger.info(f"Retornando {len(assistencias)} assistências")
     return jsonify(result)
+
+@api.route('/assistencias/<int:id>', methods=['GET'])
+def get_assistencia(id):
+    try:
+        assistencia = Assistencia.query.get_or_404(id)
+        result = assistencia_schema.dump(assistencia)
+        # Include client information in the response
+        result['cliente'] = cliente_schema.dump(assistencia.cliente)
+        logger.info(f"Retornando assistência {id}")
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Erro ao buscar assistência {id}: {str(e)}")
+        return jsonify({"error": str(e)}), 404
