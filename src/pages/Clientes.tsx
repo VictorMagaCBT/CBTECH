@@ -25,9 +25,9 @@ export const Clientes = () => {
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const data = await apiService.getClientes();
-        if (Array.isArray(data)) {
-          const sortedClientes = [...data].sort((a, b) => 
+        const clientes = await apiService.getClientes();
+        if (Array.isArray(clientes)) {
+          const sortedClientes = [...clientes].sort((a, b) => 
             a.nome.localeCompare(b.nome)
           );
           setClientes(sortedClientes);
