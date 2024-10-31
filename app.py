@@ -39,7 +39,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = config.SQLALCHEMY_ENGINE_OPTIONS
 @app.after_request
 def after_request(response: Response) -> Response:
     origin = request.headers.get('Origin')
-    if origin in ["http://localhost:5173", "https://cbtechapp.netlify.app"]:
+    if origin in ["https://cbtechapp.netlify.app"]:
         response.headers.add('Access-Control-Allow-Origin', origin)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
