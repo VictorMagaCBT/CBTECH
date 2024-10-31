@@ -19,7 +19,7 @@ interface Assistencia {
   valor: number;
   estado: 'orçamentado' | 'reparado' | 'entregue';
   data_entrada: string;
-  data_saida: string | null;
+  data_saida: string;
   cliente: {
     id: number;
     nome: string;
@@ -65,9 +65,9 @@ export const AssistenciaDetalhes = () => {
     e.preventDefault();
     try {
       const response = await apiService.updateAssistencia(Number(id), formData);
-      setAssistencia(response.data);
+      setAssistencia(response.data); // Access the data property of the response
       setSuccess('Assistência atualizada com sucesso!');
-      setIsEditing(false);
+      setIsEditing(false); // 
     } catch (err: any) {
       setError(`Erro ao atualizar assistência: ${err.message}`);
     }
