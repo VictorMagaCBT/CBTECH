@@ -25,16 +25,26 @@ export const Clientes = () => {
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const clientes = await apiService.getClientes();
-        if (Array.isArray(clientes)) {
-          const sortedClientes = [...clientes].sort((a, b) => 
+        const response = await apiService.getClientes();
+        console.log('Dados recebidos:', response);
+        
+        // Se response for um objeto com propriedade data, use response.data
+        // Caso contrário, use response diretamente
+        const clientesData = response.data || response;
+        
+        if (clientesData && (Array.isArray(clientesData) || typeof clientesData === 'object')) {
+          const dataArray = Array.isArray(clientesData) ? clientesData : [clientesData];
+          const sortedClientes = [...dataArray].sort((a, b) => 
             a.nome.localeCompare(b.nome)
           );
           setClientes(sortedClientes);
+          setError(''); // Limpa qualquer erro anterior
         } else {
+          console.error('Formato inesperado:', clientesData);
           setError('Formato de dados inválido');
         }
       } catch (err: any) {
+        console.error('Erro completo:', err);
         setError(`Falha ao buscar clientes: ${err.message}`);
       } finally {
         setLoading(false);

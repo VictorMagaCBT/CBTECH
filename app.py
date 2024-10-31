@@ -38,12 +38,6 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = config.SQLALCHEMY_ENGINE_OPTIONS
 
 @app.after_request
 def after_request(response: Response) -> Response:
-    origin = request.headers.get('Origin')
-    if origin in ["https://cbtechapp.netlify.app"]:
-        response.headers.add('Access-Control-Allow-Origin', origin)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
     return response
 
 db.init_app(app)
