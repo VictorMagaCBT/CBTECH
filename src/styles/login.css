@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-    background-image: url('LogoCBTECH.jpg'); /* Define a imagem de fundo */
+    background-image: url('../components/LogoCBTECH.jpg'); /* Define a imagem de fundo */
     background-repeat: repeat; 
     padding: 1rem;
   }

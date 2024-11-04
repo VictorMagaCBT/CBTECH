@@ -115,15 +115,38 @@ def handle_assistencias():
     logger.info(f"Retornando {len(assistencias)} assistências")
     return jsonify(result)
 
-@api.route('/assistencias/<int:id>', methods=['GET'])
-def get_assistencia(id):
+@api.route('/assistencias/<int:id>', methods=['GET', 'PUT'])
+def handle_assistencia(id):
     try:
         assistencia = Assistencia.query.get_or_404(id)
-        result = assistencia_schema.dump(assistencia)
-        # Include client information in the response
-        result['cliente'] = cliente_schema.dump(assistencia.cliente)
-        logger.info(f"Retornando assistência {id}")
-        return jsonify(result)
+        
+        if request.method == 'PUT':
+            logger.info(f"Recebida requisição PUT para atualizar assistência {id}")
+            logger.debug(f"Dados recebidos: {request.json}")
+            
+            data = request.json
+            
+            # Atualizar campos
+            assistencia.marca = data.get('marca', assistencia.marca)
+            assistencia.modelo = data.get('modelo', assistencia.modelo)
+            assistencia.imei = data.get('imei', assistencia.imei)
+            assistencia.codigo_seguranca = data.get('codigo_seguranca', assistencia.codigo_seguranca)
+            assistencia.avaria = data.get('avaria', assistencia.avaria)
+            assistencia.observacoes = data.get('observacoes', assistencia.observacoes)
+            assistencia.tecnico = data.get('tecnico', assistencia.tecnico)
+            assistencia.valor = data.get('valor', assistencia.valor)
+            assistencia.estado = data.get('estado', assistencia.estado)
+            
+            db.session.commit()
+            logger.info(f"Assistência {id} atualizada com sucesso")
+            
+            # Retornar assistência atualizada
+            return jsonify(assistencia_schema.dump(assistencia))
+        
+        # GET request
+        return jsonify(assistencia_schema.dump(assistencia))
+        
     except Exception as e:
-        logger.error(f"Erro ao buscar assistência {id}: {str(e)}")
-        return jsonify({"error": str(e)}), 404
+        logger.error(f"Erro ao processar assistência {id}: {str(e)}")
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 400
