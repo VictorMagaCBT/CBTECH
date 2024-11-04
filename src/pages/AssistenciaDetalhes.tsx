@@ -7,6 +7,14 @@ import { apiService } from '../api';
 import "../styles/pages.css";
 import "../styles/assistencia-detalhes.css";
 
+interface Cliente {
+  id: number;
+  nome: string;
+  email: string;
+}
+
+type EstadoAssistencia = 'orçamentado' | 'reparado' | 'entregue';
+
 interface Assistencia {
   id: number;
   marca: string;
@@ -17,14 +25,10 @@ interface Assistencia {
   observacoes: string;
   tecnico: string;
   valor: number;
-  estado: 'orçamentado' | 'reparado' | 'entregue';
+  estado: EstadoAssistencia;
   data_entrada: string;
-  data_saida: string;
-  cliente: {
-    id: number;
-    nome: string;
-    email: string;
-  };
+  data_saida: string | null;
+  cliente: Cliente;
 }
 
 export const AssistenciaDetalhes = () => {
@@ -40,42 +44,101 @@ export const AssistenciaDetalhes = () => {
   useEffect(() => {
     const fetchAssistencia = async () => {
       try {
+        setLoading(true);
         const response = await apiService.getAssistenciaById(Number(id));
         setAssistencia(response.data);
         setFormData(response.data);
-        setLoading(false);
       } catch (err: any) {
         setError(`Erro ao carregar assistência: ${err.message}`);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchAssistencia();
+    if (id) {
+      fetchAssistencia();
+    }
   }, [id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleEstadoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, estado: e.target.value as Assistencia['estado'] });
+    const value = e.target.value as EstadoAssistencia;
+    setFormData(prev => ({
+      ...prev,
+      estado: value
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+    
+    if (!assistencia?.cliente?.id) {
+      setError('Dados do cliente não disponíveis');
+      return;
+    }
+
     try {
-      const response = await apiService.updateAssistencia(Number(id), formData);
-      setAssistencia(response.data); // Access the data property of the response
+      const updateData = {
+        ...formData,
+        cliente_id: assistencia.cliente.id,
+        valor: typeof formData.valor === 'string' ? parseFloat(formData.valor) : formData.valor
+      };
+
+      const response = await apiService.updateAssistencia(Number(id), updateData);
       setSuccess('Assistência atualizada com sucesso!');
-      setIsEditing(false); // 
+      setAssistencia(response.data);
+      
+      // Refresh the data
+      const refreshResponse = await apiService.getAssistenciaById(Number(id));
+      setAssistencia(refreshResponse.data);
+      setFormData(refreshResponse.data);
+      setIsEditing(false);
     } catch (err: any) {
-      setError(`Erro ao atualizar assistência: ${err.message}`);
+      console.error('Error updating assistência:', err);
+      setError(`Erro ao atualizar assistência: ${err.response?.data?.error || err.message}`);
     }
   };
 
-  if (loading) return <div className="loading">Carregando...</div>;
-  if (error) return <div className="error">{error}</div>;
-  if (!assistencia) return <div className="error">Assistência não encontrada</div>;
+  if (loading) {
+    return (
+      <div className="page assistencia-detalhes">
+        <div className="loading-state">Carregando...</div>
+      </div>
+    );
+  }
+
+  if (error && !assistencia) {
+    return (
+      <div className="page assistencia-detalhes">
+        <div className="error-message">{error}</div>
+        <button className="voltar-button" onClick={() => navigate(-1)}>
+          <ArrowLeft size={20} />
+          Voltar
+        </button>
+      </div>
+    );
+  }
+
+  if (!assistencia) {
+    return (
+      <div className="page assistencia-detalhes">
+        <div className="error-message">Assistência não encontrada</div>
+        <button className="voltar-button" onClick={() => navigate(-1)}>
+          <ArrowLeft size={20} />
+          Voltar
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="page assistencia-detalhes">
@@ -99,7 +162,7 @@ export const AssistenciaDetalhes = () => {
                 <input
                   type="text"
                   name="marca"
-                  value={formData.marca}
+                  value={formData.marca || ''}
                   onChange={handleInputChange}
                   required
                 />
@@ -109,7 +172,7 @@ export const AssistenciaDetalhes = () => {
                 <input
                   type="text"
                   name="modelo"
-                  value={formData.modelo}
+                  value={formData.modelo || ''}
                   onChange={handleInputChange}
                   required
                 />
@@ -119,7 +182,7 @@ export const AssistenciaDetalhes = () => {
                 <input
                   type="text"
                   name="imei"
-                  value={formData.imei}
+                  value={formData.imei || ''}
                   onChange={handleInputChange}
                   required
                 />
@@ -129,8 +192,19 @@ export const AssistenciaDetalhes = () => {
                 <input
                   type="text"
                   name="codigo_seguranca"
-                  value={formData.codigo_seguranca}
+                  value={formData.codigo_seguranca || ''}
                   onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Valor</label>
+                <input
+                  type="number"
+                  name="valor"
+                  value={formData.valor || ''}
+                  onChange={handleInputChange}
+                  step="0.01"
                   required
                 />
               </div>
@@ -140,7 +214,7 @@ export const AssistenciaDetalhes = () => {
                 <label>Avaria</label>
                 <textarea
                   name="avaria"
-                  value={formData.avaria}
+                  value={formData.avaria || ''}
                   onChange={handleInputChange}
                   required
                 />
@@ -149,7 +223,7 @@ export const AssistenciaDetalhes = () => {
                 <label>Observações</label>
                 <textarea
                   name="observacoes"
-                  value={formData.observacoes}
+                  value={formData.observacoes || ''}
                   onChange={handleInputChange}
                 />
               </div>
