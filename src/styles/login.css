@@ -90,12 +90,22 @@
     margin-bottom: 1rem;
   }
   
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .login-container {
       padding: 1.5rem;
+    }
+    .login-page {
+      background-size: 50% 50%;
     }
   
     .login-container h1 {
       font-size: 1.5rem;
     }
   }
+
+  @media (max-width: 425px) {
+    .login-page {
+      background-size: 50% 50%;
+    }
+  }
+  
