@@ -32,6 +32,18 @@
   color: #3b82f6;
   background-color: #f3f4f6;
 }
+.logout-button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+}
+
+.logout-button:hover {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
 
 .menu-icon {
   display: none;
@@ -72,5 +84,8 @@
 
   .menu-icon {
     display: block;
+  }
+  .logout-button {
+    border-bottom: none;
   }
 }

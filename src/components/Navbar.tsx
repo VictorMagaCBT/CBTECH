@@ -1,13 +1,21 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, LogOut } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import "../styles/navbar.css";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   return (
@@ -22,6 +30,10 @@ export const Navbar = () => {
           <Link className="nav-link" to="/novoCliente" onClick={() => setIsMenuOpen(false)}>Novo Cliente</Link>
           <Link className="nav-link" to="/novaAssistencia" onClick={() => setIsMenuOpen(false)}>Criar Assistência</Link>
           <Link className="nav-link" to="/pesquisar" onClick={() => setIsMenuOpen(false)}>Pesquisar</Link>
+          <button className="nav-link logout-button" onClick={handleLogout}>
+            <LogOut size={18} />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
     </nav>  

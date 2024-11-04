@@ -1,6 +1,9 @@
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { Navbar } from './components/Navbar';
+import { Login } from './pages/Login';
 import { Home } from './pages/Home';
 import { Clientes } from './pages/Clientes';
 import { ClienteDetalhes } from './pages/ClienteDetalhes';
@@ -11,21 +14,77 @@ import { Pesquisar } from './pages/Pesquisar';
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
-      <div className="min-h-screen bg-gray-100">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/clientes" element={<Clientes />} />
-          <Route path="/cliente/:id" element={<ClienteDetalhes />} />
-          <Route path="/novoCliente" element={<NovoCliente />} />
-          <Route path="/novaAssistencia" element={<NovaAssistencia />} />
-          <Route path="/assistencia/:id" element={<AssistenciaDetalhes />} />
-          <Route path="/pesquisar" element={<Pesquisar />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        
+        <Route path="/" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-100">
+              <Navbar />
+              <Home />
+            </div>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/clientes" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-100">
+              <Navbar />
+              <Clientes />
+            </div>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/cliente/:id" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-100">
+              <Navbar />
+              <ClienteDetalhes />
+            </div>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/novoCliente" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-100">
+              <Navbar />
+              <NovoCliente />
+            </div>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/novaAssistencia" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-100">
+              <Navbar />
+              <NovaAssistencia />
+            </div>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/assistencia/:id" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-100">
+              <Navbar />
+              <AssistenciaDetalhes />
+            </div>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/pesquisar" element={
+          <ProtectedRoute>
+            <div className="min-h-screen bg-gray-100">
+              <Navbar />
+              <Pesquisar />
+            </div>
+          </ProtectedRoute>
+        } />
+      </Routes>
     </Router>
-  );
+  </AuthProvider>
+);
 }
 
 export default App;
