@@ -153,7 +153,6 @@ export const ClienteDetalhes: React.FC = () => {
                       {new Date(assistencia.data_entrada).toLocaleDateString()}
                     </div>
                     <div className="valor">
-                      <DollarSign size={16} />
                       €{assistencia.valor.toFixed(2)}
                     </div>
                   </div>

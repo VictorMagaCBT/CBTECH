@@ -107,7 +107,8 @@ export const apiService = {
 
   getAssistenciaById: async (id: number) => {
     try {
-      return await api.get(`/assistencias/${id}`);
+      const response = await api.get(`/assistencias/${id}`);
+      return { data: response.data };
     } catch (error) {
       console.error(`Error fetching assistência ${id}:`, error);
       throw error;
@@ -125,7 +126,9 @@ export const apiService = {
 
   updateAssistencia: async (id: number, data: any) => {
     try {
-      return await api.put(`/assistencias/${id}`, data);
+      console.log('Updating assistência with data:', data);
+      const response = await api.put(`/assistencias/${id}`, data);
+      return { data: response.data };
     } catch (error) {
       console.error('Error updating assistência:', error);
       throw error;

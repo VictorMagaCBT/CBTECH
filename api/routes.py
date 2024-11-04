@@ -140,11 +140,23 @@ def handle_assistencia(id):
             db.session.commit()
             logger.info(f"Assistência {id} atualizada com sucesso")
             
-            # Retornar assistência atualizada
-            return jsonify(assistencia_schema.dump(assistencia))
+            # Retornar assistência atualizada com informações do cliente
+            result = assistencia_schema.dump(assistencia)
+            result['cliente'] = {
+                'id': assistencia.cliente.id,
+                'nome': assistencia.cliente.nome,
+                'email': assistencia.cliente.email
+            }
+            return jsonify(result)
         
         # GET request
-        return jsonify(assistencia_schema.dump(assistencia))
+        result = assistencia_schema.dump(assistencia)
+        result['cliente'] = {
+            'id': assistencia.cliente.id,
+            'nome': assistencia.cliente.nome,
+            'email': assistencia.cliente.email
+        }
+        return jsonify(result)
         
     except Exception as e:
         logger.error(f"Erro ao processar assistência {id}: {str(e)}")
