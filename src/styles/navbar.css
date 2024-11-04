@@ -33,11 +33,10 @@
   background-color: #f3f4f6;
 }
 .logout-button {
-  margin-left: auto;
   background: none;
   border: none;
   cursor: pointer;
-  color: #ef4444;
+  color: #f19b69;
 }
 
 .logout-button:hover {
