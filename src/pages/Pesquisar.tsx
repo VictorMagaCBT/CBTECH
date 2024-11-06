@@ -19,6 +19,13 @@ interface Assistencia {
   cliente: Cliente;
   data_entrada: string;
   avaria: string;
+  estado: string;
+  valor: number;
+}
+
+interface ClienteQuery {
+  nome: string;
+  telefone: string;
 }
 
 interface AssistenciaQuery {
@@ -31,9 +38,9 @@ interface AssistenciaQuery {
 export const Pesquisar = () => {
   const navigate = useNavigate();
   const [searchType, setSearchType] = useState<'cliente' | 'assistencia'>('cliente');
-  const [clienteQuery, setClienteQuery] = useState({ nome: '', telefone: '' });
-  const [assistenciaQuery, setAssistenciaQuery] = useState<AssistenciaQuery>({ 
-    marca: '', 
+  const [clienteQuery, setClienteQuery] = useState<ClienteQuery>({ nome: '', telefone: '' });
+  const [assistenciaQuery, setAssistenciaQuery] = useState<AssistenciaQuery>({
+    marca: '',
     modelo: '',
     dataInicio: '',
     dataFim: ''
@@ -48,9 +55,10 @@ export const Pesquisar = () => {
       if (searchType === 'cliente' && (clienteQuery.nome || clienteQuery.telefone)) {
         try {
           const response = await apiService.searchClientes(clienteQuery);
-          setSugestoes(response.data);
+          setSugestoes(response.data || []);
         } catch (err) {
           console.error('Erro ao buscar sugestões de clientes:', err);
+          setSugestoes([]);
         }
       } else if (searchType === 'assistencia' && (assistenciaQuery.marca || assistenciaQuery.modelo)) {
         try {
@@ -60,9 +68,10 @@ export const Pesquisar = () => {
             dataInicio: assistenciaQuery.dataInicio || undefined,
             dataFim: assistenciaQuery.dataFim || undefined
           });
-          setSugestoes(response.data);
+          setSugestoes(response.data || []);
         } catch (err) {
           console.error('Erro ao buscar sugestões de assistências:', err);
+          setSugestoes([]);
         }
       } else {
         setSugestoes([]);
@@ -79,7 +88,7 @@ export const Pesquisar = () => {
     try {
       if (searchType === 'cliente') {
         const response = await apiService.searchClientes(clienteQuery);
-        setResultados(response.data);
+        setResultados(response.data || []);
       } else {
         const response = await apiService.searchAssistencias({
           marca: assistenciaQuery.marca,
@@ -87,11 +96,12 @@ export const Pesquisar = () => {
           dataInicio: assistenciaQuery.dataInicio || undefined,
           dataFim: assistenciaQuery.dataFim || undefined
         });
-        setResultados(response.data);
+        setResultados(response.data || []);
       }
       setSugestoes([]);
     } catch (err: any) {
       setError(`Erro na pesquisa: ${err.message}`);
+      setResultados([]);
     } finally {
       setLoading(false);
     }
@@ -226,7 +236,7 @@ export const Pesquisar = () => {
                   <div className="sugestao-assistencia">
                     <Smartphone size={16} />
                     <span>#{sugestao.id} - {sugestao.marca} {sugestao.modelo}</span>
-                    <span className="sugestao-info">{sugestao.cliente.nome}</span>
+                    <span className="sugestao-info">{sugestao.cliente?.nome}</span>
                   </div>
                 )}
               </div>
@@ -279,9 +289,10 @@ export const Pesquisar = () => {
                       <h3>#{resultado.id} - {resultado.marca} {resultado.modelo}</h3>
                     </div>
                     <div className="card-content">
-                      <p><strong>Cliente:</strong> {resultado.cliente.nome}</p>
+                      <p><strong>Cliente:</strong> {resultado.cliente?.nome}</p>
                       <p><strong>Data:</strong> {new Date(resultado.data_entrada).toLocaleDateString()}</p>
-                      <p><strong>Avaria:</strong> {resultado.avaria}</p>
+                      <p><strong>Estado:</strong> {resultado.estado}</p>
+                      <p><strong>Valor:</strong> {resultado.valor.toFixed(2)}€</p>
                     </div>
                   </>
                 )}

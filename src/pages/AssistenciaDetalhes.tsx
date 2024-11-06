@@ -184,7 +184,6 @@ export const AssistenciaDetalhes = () => {
                   name="imei"
                   value={formData.imei || ''}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
               <div className="form-group">
@@ -194,7 +193,6 @@ export const AssistenciaDetalhes = () => {
                   name="codigo_seguranca"
                   value={formData.codigo_seguranca || ''}
                   onChange={handleInputChange}
-                  required
                 />
               </div>
               <div className="form-group">
@@ -205,7 +203,6 @@ export const AssistenciaDetalhes = () => {
                   value={formData.valor || ''}
                   onChange={handleInputChange}
                   step="0.01"
-                  required
                 />
               </div>
             </div>

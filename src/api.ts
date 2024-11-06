@@ -154,7 +154,7 @@ export const apiService = {
   searchAssistencias: async (query: SearchAssistenciaParams) => {
     try {
       const response = await api.get('/assistencias/search', { params: query });
-      return response.data;
+      return { data: response.data || [] }; // Garante que sempre retorna um array
     } catch (error) {
       console.error('Error searching assistências:', error);
       throw error;

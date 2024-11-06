@@ -38,35 +38,34 @@ def search_assistencias():
         data_inicio = request.args.get('dataInicio')
         data_fim = request.args.get('dataFim')
 
-        # Construir a query base
-        query = Assistencia.query
+        query = Assistencia.query.join(Cliente)
 
-        # Adicionar filtros se fornecidos
-        filters = []
         if marca:
-            filters.append(Assistencia.marca.ilike(f'%{marca}%'))
+            query = query.filter(Assistencia.marca.ilike(f'%{marca}%'))
         if modelo:
-            filters.append(Assistencia.modelo.ilike(f'%{modelo}%'))
-        
-        # Adicionar filtros de data se fornecidos
+            query = query.filter(Assistencia.modelo.ilike(f'%{modelo}%'))
         if data_inicio:
-            data_inicio = datetime.strptime(data_inicio, '%Y-%m-%d')
-            filters.append(Assistencia.data_entrada >= data_inicio)
+            query = query.filter(Assistencia.data_entrada >= data_inicio)
         if data_fim:
-            data_fim = datetime.strptime(data_fim, '%Y-%m-%d')
-            filters.append(Assistencia.data_entrada <= data_fim)
-
-        if filters:
-            query = query.filter(and_(*filters))
+            query = query.filter(Assistencia.data_entrada <= data_fim)
 
         assistencias = query.all()
-        result = assistencias_schema.dump(assistencias)
-        return jsonify(result)
+        result = []
+        
+        for assistencia in assistencias:
+            assistencia_data = assistencia_schema.dump(assistencia)
+            assistencia_data['cliente'] = {
+                'id': assistencia.cliente.id,
+                'nome': assistencia.cliente.nome,
+                'email': assistencia.cliente.email
+            }
+            result.append(assistencia_data)
 
+        return jsonify(result)
     except Exception as e:
         logger.error(f"Erro na pesquisa de assistências: {str(e)}")
         return jsonify({"error": str(e)}), 400
-
+    
 @api.route('/clientes', methods=['GET', 'POST'])
 def handle_clientes():
     logger.info("Clientes route accessed")
