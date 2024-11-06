@@ -27,6 +27,7 @@ export const Navbar = () => {
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
           <Link className="nav-link" to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
           <Link className="nav-link" to="/clientes" onClick={() => setIsMenuOpen(false)}>Clientes</Link>
+          <Link className="nav-link" to="/assistencias" onClick={() => setIsMenuOpen(false)}>Assistências</Link>
           <Link className="nav-link" to="/novoCliente" onClick={() => setIsMenuOpen(false)}>Novo Cliente</Link>
           <Link className="nav-link" to="/novaAssistencia" onClick={() => setIsMenuOpen(false)}>Criar Assistência</Link>
           <Link className="nav-link" to="/pesquisar" onClick={() => setIsMenuOpen(false)}>Pesquisar</Link>

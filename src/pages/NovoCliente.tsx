@@ -61,7 +61,6 @@ export const NovoCliente = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="form-group">
@@ -72,7 +71,6 @@ export const NovoCliente = () => {
             name="nif"
             value={formData.nif}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="form-group">
@@ -94,7 +92,6 @@ export const NovoCliente = () => {
             name="morada"
             value={formData.morada}
             onChange={handleChange}
-            required
           />
         </div>
         <button type="submit" className="submit-button">Criar Cliente</button>

@@ -21,7 +21,7 @@ export const NovaAssistencia = () => {
     codigo_seguranca: '',
     avaria: '',
     observacoes: '',
-    tecnico: '',
+    tecnico: 'Luis Teixeira',
     valor: '',
     estado: 'orçamentado'
   });
@@ -76,7 +76,7 @@ export const NovaAssistencia = () => {
       const assistenciaData = {
         ...formData,
         cliente_id: selectedCliente.id,
-        valor: parseFloat(formData.valor),
+        valor: formData.valor ? parseFloat(formData.valor) : 0,
       };
       const response = await apiService.createAssistencia(assistenciaData);
       console.log('Assistência criada:', response.data);
@@ -90,7 +90,7 @@ export const NovaAssistencia = () => {
         codigo_seguranca: '',
         avaria: '',
         observacoes: '',
-        tecnico: '',
+        tecnico: 'Luis Teixeira',
         valor: '',
         estado: 'orçamentado'
       });
@@ -172,7 +172,7 @@ export const NovaAssistencia = () => {
                 name="imei"
                 value={formData.imei}
                 onChange={handleInputChange}
-                required
+                
               />
             </div>
             <div className="form-group">
@@ -194,7 +194,7 @@ export const NovaAssistencia = () => {
                 name="tecnico"
                 value={formData.tecnico}
                 onChange={handleInputChange}
-                required
+                
               />
             </div>
           </div>
@@ -229,7 +229,7 @@ export const NovaAssistencia = () => {
                 value={formData.valor}
                 onChange={handleInputChange}
                 step="0.01"
-                required
+              
               />
             </div>
             <div className="form-group">

@@ -4,6 +4,13 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://cbtech-f.onrender.com/a
 
 console.log('API_URL:', API_URL);
 
+interface SearchAssistenciaParams {
+  marca?: string;
+  modelo?: string;
+  dataInicio?: string;
+  dataFim?: string;
+}
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -144,14 +151,16 @@ export const apiService = {
     }
   },
 
-  searchAssistencias: async (query: { marca?: string; modelo?: string }) => {
+  searchAssistencias: async (query: SearchAssistenciaParams) => {
     try {
-      return await api.get('/assistencias/search', { params: query });
+      const response = await api.get('/assistencias/search', { params: query });
+      return response.data;
     } catch (error) {
       console.error('Error searching assistências:', error);
       throw error;
     }
   }
 };
+
 
 export { api };

@@ -10,6 +10,7 @@ import { ClienteDetalhes } from './pages/ClienteDetalhes';
 import { NovoCliente } from './pages/NovoCliente';
 import { NovaAssistencia } from './pages/NovaAssistencia';
 import { AssistenciaDetalhes } from './pages/AssistenciaDetalhes';
+import { Assistencias } from './pages/Assistencias';
 import { Pesquisar } from './pages/Pesquisar';
 
 function App() {
@@ -72,6 +73,15 @@ function App() {
             </div>
           </ProtectedRoute>
         } />
+
+<Route path="/assistencias" element={
+            <ProtectedRoute>
+              <div className="min-h-screen bg-gray-100">
+                <Navbar />
+                <Assistencias />
+              </div>
+            </ProtectedRoute>
+          } />
         
         <Route path="/pesquisar" element={
           <ProtectedRoute>

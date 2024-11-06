@@ -21,11 +21,23 @@ interface Assistencia {
   avaria: string;
 }
 
+interface AssistenciaQuery {
+  marca: string;
+  modelo: string;
+  dataInicio: string;
+  dataFim: string;
+}
+
 export const Pesquisar = () => {
   const navigate = useNavigate();
   const [searchType, setSearchType] = useState<'cliente' | 'assistencia'>('cliente');
   const [clienteQuery, setClienteQuery] = useState({ nome: '', telefone: '' });
-  const [assistenciaQuery, setAssistenciaQuery] = useState({ marca: '', modelo: '' });
+  const [assistenciaQuery, setAssistenciaQuery] = useState<AssistenciaQuery>({ 
+    marca: '', 
+    modelo: '',
+    dataInicio: '',
+    dataFim: ''
+  });
   const [resultados, setResultados] = useState<Array<Cliente | Assistencia>>([]);
   const [sugestoes, setSugestoes] = useState<Array<Cliente | Assistencia>>([]);
   const [loading, setLoading] = useState(false);
@@ -33,21 +45,26 @@ export const Pesquisar = () => {
 
   useEffect(() => {
     const buscarSugestoes = async () => {
-      if (!clienteQuery.nome && !clienteQuery.telefone && !assistenciaQuery.marca && !assistenciaQuery.modelo) {
-        setSugestoes([]);
-        return;
-      }
-
-      try {
-        if (searchType === 'cliente' && (clienteQuery.nome || clienteQuery.telefone)) {
+      if (searchType === 'cliente' && (clienteQuery.nome || clienteQuery.telefone)) {
+        try {
           const response = await apiService.searchClientes(clienteQuery);
-          setSugestoes(response.data || []);
-        } else if (searchType === 'assistencia' && (assistenciaQuery.marca || assistenciaQuery.modelo)) {
-          const response = await apiService.searchAssistencias(assistenciaQuery);
-          setSugestoes(response?.data || []);
+          setSugestoes(response.data);
+        } catch (err) {
+          console.error('Erro ao buscar sugestões de clientes:', err);
         }
-      } catch (err) {
-        console.error('Erro ao buscar sugestões:', err);
+      } else if (searchType === 'assistencia' && (assistenciaQuery.marca || assistenciaQuery.modelo)) {
+        try {
+          const response = await apiService.searchAssistencias({
+            marca: assistenciaQuery.marca,
+            modelo: assistenciaQuery.modelo,
+            dataInicio: assistenciaQuery.dataInicio || undefined,
+            dataFim: assistenciaQuery.dataFim || undefined
+          });
+          setSugestoes(response.data);
+        } catch (err) {
+          console.error('Erro ao buscar sugestões de assistências:', err);
+        }
+      } else {
         setSugestoes([]);
       }
     };
@@ -60,17 +77,21 @@ export const Pesquisar = () => {
     setLoading(true);
     setError('');
     try {
-      let response;
       if (searchType === 'cliente') {
-        response = await apiService.searchClientes(clienteQuery);
+        const response = await apiService.searchClientes(clienteQuery);
+        setResultados(response.data);
       } else {
-        response = await apiService.searchAssistencias(assistenciaQuery);
+        const response = await apiService.searchAssistencias({
+          marca: assistenciaQuery.marca,
+          modelo: assistenciaQuery.modelo,
+          dataInicio: assistenciaQuery.dataInicio || undefined,
+          dataFim: assistenciaQuery.dataFim || undefined
+        });
+        setResultados(response.data);
       }
-      setResultados(response.data || []);
-      setSugestoes([]); // Clear suggestions after search
+      setSugestoes([]);
     } catch (err: any) {
       setError(`Erro na pesquisa: ${err.message}`);
-      setResultados([]);
     } finally {
       setLoading(false);
     }
@@ -80,13 +101,9 @@ export const Pesquisar = () => {
     navigate(`/cliente/${clienteId}`);
   };
 
-  const handleAssistenciaClick = (assistenciaId: number) => {
-    navigate(`/assistencia/${assistenciaId}`);
-  };
-
   const clearSearch = () => {
     setClienteQuery({ nome: '', telefone: '' });
-    setAssistenciaQuery({ marca: '', modelo: '' });
+    setAssistenciaQuery({ marca: '', modelo: '', dataInicio: '', dataFim: '' });
     setResultados([]);
     setSugestoes([]);
     setError('');
@@ -96,7 +113,7 @@ export const Pesquisar = () => {
     if ('nome' in sugestao) {
       handleClienteClick(sugestao.id);
     } else {
-      handleAssistenciaClick(sugestao.id);
+      navigate(`/assistencia/${sugestao.id}`);
     }
   };
 
@@ -170,10 +187,28 @@ export const Pesquisar = () => {
                 placeholder="Digite o modelo do dispositivo"
               />
             </div>
+            <div className="field-group date-range">
+              <div className="date-field">
+                <label>Data Início</label>
+                <input
+                  type="date"
+                  value={assistenciaQuery.dataInicio}
+                  onChange={(e) => setAssistenciaQuery({ ...assistenciaQuery, dataInicio: e.target.value })}
+                />
+              </div>
+              <div className="date-field">
+                <label>Data Fim</label>
+                <input
+                  type="date"
+                  value={assistenciaQuery.dataFim}
+                  onChange={(e) => setAssistenciaQuery({ ...assistenciaQuery, dataFim: e.target.value })}
+                />
+              </div>
+            </div>
           </div>
         )}
 
-        {sugestoes && sugestoes.length > 0 && (
+        {sugestoes.length > 0 && (
           <div className="sugestoes-lista">
             {sugestoes.map((sugestao: any) => (
               <div
@@ -190,8 +225,8 @@ export const Pesquisar = () => {
                 ) : (
                   <div className="sugestao-assistencia">
                     <Smartphone size={16} />
-                    <span>{sugestao.marca} {sugestao.modelo}</span>
-                    <span className="sugestao-info">{sugestao.cliente?.nome}</span>
+                    <span>#{sugestao.id} - {sugestao.marca} {sugestao.modelo}</span>
+                    <span className="sugestao-info">{sugestao.cliente.nome}</span>
                   </div>
                 )}
               </div>
@@ -214,7 +249,7 @@ export const Pesquisar = () => {
       {loading && <div className="loading-state">Pesquisando...</div>}
       {error && <div className="error-message">{error}</div>}
 
-      {resultados && resultados.length > 0 && (
+      {resultados.length > 0 && (
         <div className="resultados-container">
           <h2>Resultados da Pesquisa</h2>
           <div className="resultados-grid">
@@ -224,7 +259,7 @@ export const Pesquisar = () => {
                 className="resultado-card"
                 onClick={() => 'nome' in resultado ? 
                   handleClienteClick(resultado.id) : 
-                  handleAssistenciaClick(resultado.id)}
+                  navigate(`/assistencia/${resultado.id}`)}
               >
                 {'nome' in resultado ? (
                   <>
@@ -241,10 +276,10 @@ export const Pesquisar = () => {
                   <>
                     <div className="card-header">
                       <Smartphone size={20} />
-                      <h3>{resultado.marca} {resultado.modelo}</h3>
+                      <h3>#{resultado.id} - {resultado.marca} {resultado.modelo}</h3>
                     </div>
                     <div className="card-content">
-                      <p><strong>Cliente:</strong> {resultado.cliente?.nome}</p>
+                      <p><strong>Cliente:</strong> {resultado.cliente.nome}</p>
                       <p><strong>Data:</strong> {new Date(resultado.data_entrada).toLocaleDateString()}</p>
                       <p><strong>Avaria:</strong> {resultado.avaria}</p>
                     </div>

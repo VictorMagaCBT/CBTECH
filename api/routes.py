@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from models import db, Cliente, Assistencia
 from .schemas import cliente_schema, clientes_schema, assistencia_schema, assistencias_schema
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
+from datetime import datetime
 import logging
 
 api = Blueprint('api', __name__)
@@ -12,47 +13,56 @@ def search_clientes():
     try:
         nome = request.args.get('nome', '')
         telefone = request.args.get('telefone', '')
-        
+
         query = Cliente.query
-        
-        if nome:
-            query = query.filter(Cliente.nome.ilike(f'%{nome}%'))
-        if telefone:
-            query = query.filter(Cliente.telefone.ilike(f'%{telefone}%'))
-        
+        if nome or telefone:
+            filters = []
+            if nome:
+                filters.append(Cliente.nome.ilike(f'%{nome}%'))
+            if telefone:
+                filters.append(Cliente.telefone.ilike(f'%{telefone}%'))
+            query = query.filter(or_(*filters))
+
         clientes = query.all()
-        result = clientes_schema.dump(clientes)
-        logger.info(f"Pesquisa de clientes retornou {len(clientes)} resultados")
-        return jsonify(result)
+        return jsonify(clientes_schema.dump(clientes))
+
     except Exception as e:
         logger.error(f"Erro na pesquisa de clientes: {str(e)}")
         return jsonify({"error": str(e)}), 400
-
+    
 @api.route('/assistencias/search', methods=['GET'])
 def search_assistencias():
     try:
         marca = request.args.get('marca', '')
         modelo = request.args.get('modelo', '')
-        
+        data_inicio = request.args.get('dataInicio')
+        data_fim = request.args.get('dataFim')
+
+        # Construir a query base
         query = Assistencia.query
-        
+
+        # Adicionar filtros se fornecidos
+        filters = []
         if marca:
-            query = query.filter(Assistencia.marca.ilike(f'%{marca}%'))
+            filters.append(Assistencia.marca.ilike(f'%{marca}%'))
         if modelo:
-            query = query.filter(Assistencia.modelo.ilike(f'%{modelo}%'))
+            filters.append(Assistencia.modelo.ilike(f'%{modelo}%'))
         
-        # Include client information
-        query = query.join(Cliente)
-        
+        # Adicionar filtros de data se fornecidos
+        if data_inicio:
+            data_inicio = datetime.strptime(data_inicio, '%Y-%m-%d')
+            filters.append(Assistencia.data_entrada >= data_inicio)
+        if data_fim:
+            data_fim = datetime.strptime(data_fim, '%Y-%m-%d')
+            filters.append(Assistencia.data_entrada <= data_fim)
+
+        if filters:
+            query = query.filter(and_(*filters))
+
         assistencias = query.all()
         result = assistencias_schema.dump(assistencias)
-        
-        # Add client information to each result
-        for assistencia, assistencia_data in zip(assistencias, result):
-            assistencia_data['cliente'] = cliente_schema.dump(assistencia.cliente)
-        
-        logger.info(f"Pesquisa de assistências retornou {len(assistencias)} resultados")
         return jsonify(result)
+
     except Exception as e:
         logger.error(f"Erro na pesquisa de assistências: {str(e)}")
         return jsonify({"error": str(e)}), 400
