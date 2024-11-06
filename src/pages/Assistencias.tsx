@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Wrench, Calendar, DollarSign, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../api';
@@ -100,7 +100,7 @@ export const Assistencias = () => {
               >
                 <div className="assistencia-header">
                   <Wrench size={16} />
-                  <h3>#{assistencia.id} - {assistencia.marca} {assistencia.modelo}</h3>
+                  <h3>{assistencia.id} - {assistencia.marca} {assistencia.modelo}</h3>
                 </div>
                 <div className="assistencia-content">
                   <div className="info-row">
@@ -127,7 +127,6 @@ export const Assistencias = () => {
                       {new Date(assistencia.data_entrada).toLocaleDateString()}
                     </div>
                     <div className="valor">
-                      <DollarSign size={16} />
                       {assistencia.valor.toFixed(2)}€
                     </div>
                   </div>
