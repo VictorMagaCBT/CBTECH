@@ -120,10 +120,21 @@ def handle_assistencias():
             db.session.rollback()
             return jsonify({"error": str(e)}), 400
     
-    assistencias = Assistencia.query.all()
-    result = assistencias_schema.dump(assistencias)
-    logger.info(f"Retornando {len(assistencias)} assistências")
-    return jsonify(result)
+    try:
+        assistencias = Assistencia.query.join(Cliente).all()
+        result = []
+        for assistencia in assistencias:
+            assistencia_data = assistencia_schema.dump(assistencia)
+            assistencia_data['cliente'] = {
+                'id': assistencia.cliente.id,
+                'nome': assistencia.cliente.nome,
+                'email': assistencia.cliente.email
+            }
+            result.append(assistencia_data)
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Erro ao buscar assistências: {str(e)}")
+        return jsonify({"error": str(e)}), 400
 
 @api.route('/assistencias/<int:id>', methods=['GET', 'PUT'])
 def handle_assistencia(id):

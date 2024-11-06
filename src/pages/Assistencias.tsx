@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Wrench, Calendar, DollarSign, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../api';
@@ -9,13 +9,15 @@ interface Assistencia {
   id: number;
   marca: string;
   modelo: string;
-  imei: string;
+  imei?: string;
   avaria: string;
   valor: number;
   estado: string;
   data_entrada: string;
-  cliente: {
+  cliente?: {
+    id: number;
     nome: string;
+    email: string;
   };
 }
 
@@ -103,12 +105,14 @@ export const Assistencias = () => {
                 <div className="assistencia-content">
                   <div className="info-row">
                     <User size={16} />
-                    <span>{assistencia.cliente.nome}</span>
+                    <span>{assistencia.cliente?.nome || 'Cliente não encontrado'}</span>
                   </div>
-                  <div className="info-row">
-                    <span className="label">IMEI:</span>
-                    <span>{assistencia.imei}</span>
-                  </div>
+                  {assistencia.imei && (
+                    <div className="info-row">
+                      <span className="label">IMEI:</span>
+                      <span>{assistencia.imei}</span>
+                    </div>
+                  )}
                   <div className="info-row">
                     <span className="label">Avaria:</span>
                     <span>{assistencia.avaria}</span>
