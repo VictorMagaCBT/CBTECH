@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building, CreditCard, Wrench, Calendar, DollarSign, ArrowLeft } from 'lucide-react';
+import { User, Mail, Phone, Building, CreditCard, Wrench, Calendar, ArrowLeft } from 'lucide-react';
 import { apiService } from '../api';
 import "../styles/pages.css";
 import "../styles/cliente-detalhes.css";
