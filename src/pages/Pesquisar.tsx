@@ -292,7 +292,7 @@ export const Pesquisar = () => {
                       <p><strong>Cliente:</strong> {resultado.cliente?.nome}</p>
                       <p><strong>Data:</strong> {new Date(resultado.data_entrada).toLocaleDateString()}</p>
                       <p><strong>Estado:</strong> {resultado.estado}</p>
-                      <p><strong>Valor:</strong> {resultado.valor.toFixed(2)}€</p>
+                      <p><strong>Valor:</strong> {resultado.valor !== null ? resultado.valor.toFixed(2) + '€' : 'N/A'}</p>
                     </div>
                   </>
                 )}
