@@ -14,15 +14,13 @@
     width: 80%;;
   }
   .home-CBTECH img {
-    width: 100%;
     height: auto;
     max-width: 100%;
   }
  
   .home-logo {
-    width: 8rem;
-    height: 8rem;
-    margin-bottom: 1rem;
+    width: 7rem;
+    height: 7rem;
     animation: spin 20s linear infinite;
   }
   
@@ -42,11 +40,13 @@
   }
 
   /* Tablet styles */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .page {
     padding: 1.5rem;
   }
-
+  .home-logo {
+    margin-top: 2rem;
+  }
   .page-icon {
     width: 5rem;
     height: 5rem;
