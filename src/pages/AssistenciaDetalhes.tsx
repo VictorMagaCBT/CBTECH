@@ -278,7 +278,7 @@ export const AssistenciaDetalhes = () => {
 
           <div className="info-section">
             <h2>Detalhes do Dispositivo</h2>
-            <p><strong>Marca:</strong> {assistencia.marca}</p>
+            <p><strong>{assistencia.id} - Marca:</strong> {assistencia.marca}</p>
             <p><strong>Modelo:</strong> {assistencia.modelo}</p>
             <p><strong>IMEI:</strong> {assistencia.imei}</p>
             <p><strong>Código de Segurança:</strong> {assistencia.codigo_seguranca}</p>

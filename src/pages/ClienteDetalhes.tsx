@@ -137,7 +137,7 @@ export const ClienteDetalhes: React.FC = () => {
               >
                 <div className="assistencia-header">
                   <Wrench size={20} />
-                  <h3>{assistencia.marca} {assistencia.modelo}</h3>
+                  <h3> {assistencia.id} - {assistencia.marca} {assistencia.modelo}</h3>
                 </div>
                 <div className="assistencia-content">
                   <p><strong>IMEI:</strong> {assistencia.imei}</p>
