@@ -30,7 +30,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: #6b7280;
-    margin-left: 2rem;
+    margin-left: 0;
   }
   
   .search-input {
@@ -188,7 +188,10 @@
       font-size: 0.9rem;
       padding: 0.5rem;
     }
-  
+    .search-icon {
+      
+      margin-left: 0;
+    }
     .form-group label {
       font-size: 0.9rem;
     }

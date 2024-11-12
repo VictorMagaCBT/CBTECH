@@ -183,6 +183,9 @@
 }
 
 @media (max-width: 480px) {
+  .page {
+    padding-right: 2rem;
+  }
   .page h1 {
     font-size: 1.75rem;
   }

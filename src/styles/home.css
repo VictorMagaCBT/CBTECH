@@ -5,22 +5,23 @@
     justify-content: center;
     min-height: 100vh;
     text-align: center;
-    padding: 2rem;
+    
     
   }
   .home-CBTECH {
     height: 80%;
-    margin-top: 2rem;
+   
     width: 80%;;
   }
   .home-CBTECH img {
-    height: auto;
+    height: 80%;
     max-width: 100%;
   }
  
   .home-logo {
     width: 7rem;
     height: 7rem;
+    margin-top: 4rem;
     animation: spin 20s linear infinite;
   }
   
