@@ -286,13 +286,13 @@ export const Pesquisar = () => {
                   <>
                     <div className="card-header">
                       <Smartphone size={20} />
-                      <h3>#{resultado.id} - {resultado.marca} {resultado.modelo}</h3>
+                      <h3>{resultado.id} - {resultado.marca} {resultado.modelo}</h3>
                     </div>
                     <div className="card-content">
                       <p><strong>Cliente:</strong> {resultado.cliente?.nome}</p>
                       <p><strong>Data:</strong> {new Date(resultado.data_entrada).toLocaleDateString()}</p>
                       <p><strong>Estado:</strong> {resultado.estado}</p>
-                      <p><strong>Valor:</strong> {resultado.valor !== null ? resultado.valor.toFixed(2) + '€' : 'N/A'}</p>
+                      <p><strong>Valor:</strong> {resultado.valor != null ? resultado.valor.toFixed(2) : "0.00"}€</p>
                     </div>
                   </>
                 )}
