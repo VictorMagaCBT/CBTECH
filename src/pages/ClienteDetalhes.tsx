@@ -153,7 +153,7 @@ export const ClienteDetalhes: React.FC = () => {
                       {new Date(assistencia.data_entrada).toLocaleDateString()}
                     </div>
                     <div className="valor">
-                      €{assistencia.valor.toFixed(2)}
+                      €{assistencia.valor != null ? assistencia.valor.toFixed(2) : "0.00"}
                     </div>
                   </div>
                 </div>
