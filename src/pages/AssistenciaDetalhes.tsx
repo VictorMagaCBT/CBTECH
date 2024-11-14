@@ -289,7 +289,7 @@ export const AssistenciaDetalhes = () => {
             <p><strong>Avaria:</strong> {assistencia.avaria}</p>
             <p><strong>Observações:</strong> {assistencia.observacoes || 'Nenhuma observação'}</p>
             <p><strong>Técnico:</strong> {assistencia.tecnico}</p>
-            <p><strong>Valor:</strong> €{assistencia.valor.toFixed(2)}</p>
+            <p><strong>Valor:</strong> €{assistencia.valor != null ? assistencia.valor.toFixed(2) : "0.00"}</p>
             <p><strong>Estado:</strong> {assistencia.estado}</p>
             <p><strong>Data de Entrada:</strong> {new Date(assistencia.data_entrada).toLocaleDateString()}</p>
             {assistencia.data_saida && (
