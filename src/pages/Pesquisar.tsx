@@ -199,7 +199,7 @@ export const Pesquisar = () => {
             </div>
             <div className="field-group date-range">
               <div className="date-field">
-                <label>Data Início</label>
+                <label>Data Início   </label>
                 <input
                   type="date"
                   value={assistenciaQuery.dataInicio}
@@ -207,7 +207,7 @@ export const Pesquisar = () => {
                 />
               </div>
               <div className="date-field">
-                <label>Data Fim</label>
+                <label>Data Fim   </label>
                 <input
                   type="date"
                   value={assistenciaQuery.dataFim}
